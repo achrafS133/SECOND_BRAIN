@@ -1,350 +1,350 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1520 920" role="img" aria-label="The Second Brain data ingestion pipeline architecture">
-  <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10 Z" fill="#444"/>
-    </marker>
-    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10 Z" fill="#1168BD"/>
-    </marker>
-    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10 Z" fill="#059669"/>
-    </marker>
-    <filter id="shadow" x="-2%" y="-2%" width="104%" height="104%">
-      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.12"/>
-    </filter>
-    <linearGradient id="cloudBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FAFBFC"/>
-      <stop offset="100%" stop-color="#F0F4F8"/>
-    </linearGradient>
-  </defs>
-
-  <!-- Background -->
-  <rect width="1520" height="920" fill="#FFFFFF"/>
-
-  <!-- Title -->
-  <text x="760" y="36" text-anchor="middle" font-family="Segoe UI, Open Sans, sans-serif" font-size="22" font-weight="700" fill="#232F3E">The Second Brain — Data Ingestion Pipeline</text>
-  <text x="760" y="58" text-anchor="middle" font-family="Segoe UI, Open Sans, sans-serif" font-size="13" fill="#545B64">Stream-native ingestion · Graph-RAG · Multi-Agent CogOS</text>
-
-  <!-- Top orchestration bar -->
-  <rect x="60" y="78" width="1400" height="72" rx="4" fill="#F7FAFC" stroke="#CBD5E0" stroke-width="1"/>
-  <text x="80" y="100" font-family="Segoe UI, sans-serif" font-size="11" fill="#718096" font-weight="600">ORCHESTRATION</text>
-
-  <!-- Top flow boxes -->
-  <g filter="url(#shadow)">
-    <rect x="100" y="108" width="130" height="32" rx="3" fill="#1168BD" stroke="#0B4884"/>
-    <text x="165" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Doc Crawler</text>
-
-    <rect x="280" y="108" width="130" height="32" rx="3" fill="#1168BD" stroke="#0B4884"/>
-    <text x="345" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Git Webhook</text>
-
-    <rect x="460" y="108" width="130" height="32" rx="3" fill="#1168BD" stroke="#0B4884"/>
-    <text x="525" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Log Shipper</text>
-
-    <rect x="660" y="108" width="130" height="32" rx="3" fill="#64748B" stroke="#475569"/>
-    <text x="725" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">MQTT Bridge</text>
-
-    <rect x="840" y="108" width="180" height="32" rx="3" fill="#231F20" stroke="#000"/>
-    <text x="930" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Kafka Topic Router</text>
-
-    <rect x="1070" y="108" width="180" height="32" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
-    <text x="1160" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Memory Manager Jobs</text>
-
-    <rect x="1300" y="108" width="130" height="32" rx="3" fill="#059669" stroke="#047857"/>
-    <text x="1365" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Neo4j Loader</text>
-  </g>
-
-  <!-- Top arrows -->
-  <line x1="230" y1="124" x2="280" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="410" y1="124" x2="460" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="590" y1="124" x2="660" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="790" y1="124" x2="840" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="1020" y1="124" x2="1070" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="1250" y1="124" x2="1300" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
-
-  <!-- LEFT: External Systems -->
-  <rect x="40" y="170" width="280" height="720" rx="6" fill="url(#cloudBg)" stroke="#A0AEC0" stroke-width="1.5" stroke-dasharray="6,4"/>
-  <text x="60" y="198" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#232F3E">External Systems</text>
-  <text x="60" y="216" font-family="Segoe UI, sans-serif" font-size="11" fill="#718096">Source environment</text>
-
-  <!-- Enterprise box -->
-  <rect x="60" y="235" width="240" height="280" rx="4" fill="#EDF2F7" stroke="#CBD5E0" stroke-width="1"/>
-  <text x="80" y="258" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2D3748">Enterprise Systems</text>
-
-  <g filter="url(#shadow)">
-    <rect x="80" y="275" width="200" height="52" rx="3" fill="#FFF" stroke="#CBD5E0"/>
-    <rect x="92" y="287" width="28" height="28" rx="4" fill="#64748B"/>
-    <text x="106" y="306" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" fill="#FFF">=�</text>
-    <text x="130" y="298" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#2D3748">Documents</text>
-    <text x="130" y="314" font-family="Segoe UI, sans-serif" font-size="10" fill="#718096">PDF, MD, Confluence</text>
-
-    <rect x="80" y="340" width="200" height="52" rx="3" fill="#FFF" stroke="#CBD5E0"/>
-    <rect x="92" y="352" width="28" height="28" rx="4" fill="#64748B"/>
-    <text x="106" y="371" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" fill="#FFF">(</text>
-    <text x="130" y="363" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#2D3748">Code Repos</text>
-    <text x="130" y="379" font-family="Segoe UI, sans-serif" font-size="10" fill="#718096">GitHub / GitLab webhooks</text>
-
-    <rect x="80" y="405" width="200" height="52" rx="3" fill="#FFF" stroke="#CBD5E0"/>
-    <rect x="92" y="417" width="28" height="28" rx="4" fill="#64748B"/>
-    <text x="106" y="436" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" fill="#FFF">=�</text>
-    <text x="130" y="428" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#2D3748">Structured Logs</text>
-    <text x="130" y="444" font-family="Segoe UI, sans-serif" font-size="10" fill="#718096">App, audit, security</text>
-  </g>
-
-  <!-- IoT box -->
-  <rect x="60" y="540" width="240" height="200" rx="4" fill="#EDF2F7" stroke="#CBD5E0" stroke-width="1"/>
-  <text x="80" y="563" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2D3748">IoT Layer</text>
-
-  <g filter="url(#shadow)">
-    <rect x="80" y="580" width="200" height="52" rx="3" fill="#FFF" stroke="#CBD5E0"/>
-    <rect x="92" y="592" width="28" height="28" rx="4" fill="#64748B"/>
-    <text x="106" y="611" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" fill="#FFF">=�</text>
-    <text x="130" y="603" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#2D3748">Sensors &amp; Gateways</text>
-    <text x="130" y="619" font-family="Segoe UI, sans-serif" font-size="10" fill="#718096">MQTT / BACnet telemetry</text>
-
-    <rect x="80" y="645" width="200" height="52" rx="3" fill="#FFF" stroke="#CBD5E0"/>
-    <rect x="92" y="657" width="28" height="28" rx="4" fill="#64748B"/>
-    <text x="106" y="676" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" fill="#FFF"><�</text>
-    <text x="130" y="668" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#2D3748">Smart Facility</text>
-    <text x="130" y="684" font-family="Segoe UI, sans-serif" font-size="10" fill="#718096">HVAC, energy, actuators</text>
-  </g>
-
-  <!-- User -->
-  <g filter="url(#shadow)">
-    <rect x="100" y="780" width="160" height="80" rx="4" fill="#08427B" stroke="#052E56"/>
-    <circle cx="145" cy="810" r="16" fill="#FFF" opacity="0.9"/>
-    <text x="145" y="815" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="16">=d</text>
-    <text x="200" y="808" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#FFF">User / Operator</text>
-    <text x="200" y="826" font-family="Segoe UI, sans-serif" font-size="10" fill="#BEE3F8">Queries &amp; approvals</text>
-  </g>
-
-  <!-- CENTER: Ingestion replication zone -->
-  <rect x="340" y="170" width="200" height="720" rx="6" fill="#FFFAF0" stroke="#ED8936" stroke-width="1.5" stroke-dasharray="6,4"/>
-  <text x="360" y="198" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#232F3E">Ingestion Plane</text>
-  <text x="360" y="216" font-family="Segoe UI, sans-serif" font-size="11" fill="#718096">Continuous stream replication</text>
-
-  <!-- Kafka cluster -->
-  <rect x="360" y="235" width="160" height="340" rx="4" fill="#FFF5F5" stroke="#FC8181" stroke-width="1"/>
-  <text x="380" y="258" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2D3748">Kafka Cluster</text>
-
-  <g filter="url(#shadow)">
-    <rect x="375" y="275" width="130" height="44" rx="3" fill="#231F20" stroke="#000"/>
-    <text x="440" y="295" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">raw.documents</text>
-    <text x="440" y="309" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#A0AEC0">tenant_id partition</text>
-
-    <rect x="375" y="330" width="130" height="44" rx="3" fill="#231F20" stroke="#000"/>
-    <text x="440" y="350" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">raw.code / raw.logs</text>
-    <text x="440" y="364" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#A0AEC0">repo / service key</text>
-
-    <rect x="375" y="385" width="130" height="44" rx="3" fill="#231F20" stroke="#000"/>
-    <text x="440" y="405" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">stream.iot</text>
-    <text x="440" y="419" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#A0AEC0">device_id partition</text>
-
-    <rect x="375" y="440" width="130" height="44" rx="3" fill="#231F20" stroke="#000"/>
-    <text x="440" y="460" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">derived.entities</text>
-    <text x="440" y="474" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#A0AEC0">entity_id partition</text>
-
-    <rect x="375" y="495" width="130" height="44" rx="3" fill="#231F20" stroke="#000"/>
-    <text x="440" y="515" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">audit.actions</text>
-    <text x="440" y="529" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#A0AEC0">trace_id partition</text>
-  </g>
-
-  <!-- Replication label -->
-  <rect x="365" y="600" width="150" height="56" rx="4" fill="#FFF" stroke="#ED8936" stroke-width="1.5"/>
-  <text x="440" y="622" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" font-weight="600" fill="#C05621">At-least-once delivery</text>
-  <text x="440" y="638" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#718096">Consumer groups + offsets</text>
-  <text x="440" y="652" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#718096">Idempotent MERGE writes</text>
-
-  <!-- RIGHT: CogOS Platform -->
-  <rect x="560" y="170" width="920" height="720" rx="6" fill="url(#cloudBg)" stroke="#A0AEC0" stroke-width="2"/>
-  <!-- Cloud icon -->
-  <ellipse cx="590" cy="192" rx="14" ry="9" fill="#1168BD"/>
-  <ellipse cx="606" cy="190" rx="12" ry="8" fill="#1168BD"/>
-  <ellipse cx="578" cy="190" rx="10" ry="7" fill="#1168BD"/>
-  <text x="630" y="198" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#232F3E">The Second Brain (CogOS Platform)</text>
-  <text x="630" y="216" font-family="Segoe UI, sans-serif" font-size="11" fill="#718096">Processing · Memory · Agent orchestration</text>
-
-  <!-- VPC-like inner boundary -->
-  <rect x="580" y="230" width="880" height="640" rx="4" fill="#FFF" stroke="#718096" stroke-width="1.5"/>
-  <text x="600" y="252" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2D3748">CogOS Runtime VPC</text>
-
-  <!-- Batch Path Subnet (blue) -->
-  <rect x="600" y="265" width="400" height="200" rx="4" fill="#EBF8FF" stroke="#4299E1" stroke-width="1.5"/>
-  <text x="620" y="288" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2B6CB0">Batch Path Subnet</text>
-  <text x="620" y="304" font-family="Segoe UI, sans-serif" font-size="10" fill="#4299E1">Spark Structured Streaming</text>
-
-  <g filter="url(#shadow)">
-    <rect x="620" y="320" width="110" height="64" rx="3" fill="#1168BD" stroke="#0B4884"/>
-    <text x="675" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Spark</text>
-    <text x="675" y="360" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">Chunk + Parse</text>
-    <text x="675" y="374" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">Structured logs</text>
-
-    <rect x="750" y="320" width="110" height="64" rx="3" fill="#1168BD" stroke="#0B4884"/>
-    <text x="805" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">NER / RE</text>
-    <text x="805" y="360" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">Entity + relation</text>
-    <text x="805" y="374" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">extraction</text>
-
-    <rect x="880" y="320" width="110" height="64" rx="3" fill="#1168BD" stroke="#0B4884"/>
-    <text x="935" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Embedding</text>
-    <text x="935" y="360" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">Text / code</text>
-    <text x="935" y="374" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">vectors</text>
-  </g>
-
-  <line x1="730" y1="352" x2="750" y2="352" stroke="#1168BD" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
-  <line x1="860" y1="352" x2="880" y2="352" stroke="#1168BD" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
-
-  <!-- Stream Path Subnet (green) -->
-  <rect x="600" y="485" width="400" height="200" rx="4" fill="#F0FFF4" stroke="#48BB78" stroke-width="1.5"/>
-  <text x="620" y="508" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#276749">Stream Path Subnet</text>
-  <text x="620" y="524" font-family="Segoe UI, sans-serif" font-size="10" fill="#48BB78">Faust real-time workers</text>
-
-  <g filter="url(#shadow)">
-    <rect x="620" y="540" width="110" height="64" rx="3" fill="#059669" stroke="#047857"/>
-    <text x="675" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Faust</text>
-    <text x="675" y="580" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">Window agg</text>
-    <text x="675" y="594" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">mean, sigma, rate</text>
-
-    <rect x="750" y="540" width="110" height="64" rx="3" fill="#059669" stroke="#047857"/>
-    <text x="805" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Anomaly</text>
-    <text x="805" y="580" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">|x  �| &gt; 3�</text>
-    <text x="805" y="594" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">detection</text>
-
-    <rect x="880" y="540" width="110" height="64" rx="3" fill="#059669" stroke="#047857"/>
-    <text x="935" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Stream</text>
-    <text x="935" y="572" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Observer</text>
-    <text x="935" y="594" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">Pin + alert</text>
-  </g>
-
-  <line x1="730" y1="572" x2="750" y2="572" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow-green)"/>
-  <line x1="860" y1="572" x2="880" y2="572" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow-green)"/>
-
-  <!-- Memory Subnet -->
-  <rect x="1020" y="265" width="420" height="200" rx="4" fill="#FFFFF0" stroke="#D69E2E" stroke-width="1.5"/>
-  <text x="1040" y="288" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#975A16">Memory Tier Subnet</text>
-  <text x="1040" y="304" font-family="Segoe UI, sans-serif" font-size="10" fill="#D69E2E">M0 / M1 / M2 hierarchical memory</text>
-
-  <g filter="url(#shadow)">
-    <rect x="1040" y="320" width="120" height="80" rx="3" fill="#DC2626" stroke="#B91C1C"/>
-    <text x="1100" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">M0 Working</text>
-    <text x="1100" y="362" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#FECACA">Redis Streams</text>
-    <text x="1100" y="378" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#FECACA">Secondsminutes TTL</text>
-    <text x="1100" y="392" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#FECACA">IoT window state</text>
-
-    <rect x="1180" y="320" width="120" height="80" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
-    <text x="1240" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">M1 Short-Term</text>
-    <text x="1240" y="362" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">LLM context window</text>
-    <text x="1240" y="378" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">Session scratch</text>
-    <text x="1240" y="392" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">Pinned retrieval</text>
-
-    <rect x="1320" y="320" width="100" height="80" rx="3" fill="#059669" stroke="#047857"/>
-    <text x="1370" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">M2 Long-Term</text>
-    <text x="1370" y="362" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">Neo4j graph</text>
-    <text x="1370" y="378" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">Vector index</text>
-    <text x="1370" y="392" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">Reflections</text>
-  </g>
-
-  <!-- Agent Orchestration Subnet (dashed orange like autoscaling) -->
-  <rect x="1020" y="485" width="420" height="200" rx="4" fill="#FFFAF0" stroke="#ED8936" stroke-width="2" stroke-dasharray="8,4"/>
-  <text x="1040" y="508" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#C05621">Agent Orchestration Subnet</text>
-  <text x="1040" y="524" font-family="Segoe UI, sans-serif" font-size="10" fill="#ED8936">LangGraph state machine</text>
-
-  <g filter="url(#shadow)">
-    <rect x="1040" y="540" width="90" height="64" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
-    <text x="1085" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Orchestrator</text>
-    <text x="1085" y="582" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">Route tasks</text>
-
-    <rect x="1145" y="540" width="90" height="64" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
-    <text x="1190" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Planner</text>
-    <text x="1190" y="582" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">CoT steps</text>
-
-    <rect x="1250" y="540" width="90" height="64" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
-    <text x="1295" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Tools</text>
-    <text x="1295" y="582" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">Idempotent</text>
-
-    <rect x="1355" y="540" width="70" height="64" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
-    <text x="1390" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Critic</text>
-    <text x="1390" y="582" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">Verify</text>
-  </g>
-
-  <line x1="1130" y1="572" x2="1145" y2="572" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="1235" y1="572" x2="1250" y2="572" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="1340" y1="572" x2="1355" y2="572" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arrow)"/>
-
-  <!-- API Gateway + Load Balancer -->
-  <rect x="1020" y="710" width="420" height="140" rx="4" fill="#EDF2F7" stroke="#CBD5E0" stroke-width="1"/>
-  <text x="1040" y="733" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2D3748">Interface Layer</text>
-
-  <g filter="url(#shadow)">
-    <rect x="1040" y="750" width="160" height="56" rx="3" fill="#1168BD" stroke="#0B4884"/>
-    <text x="1120" y="775" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">FastAPI Gateway</text>
-    <text x="1120" y="792" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">POST /query · /ingest · /action</text>
-
-    <rect x="1220" y="750" width="160" height="56" rx="3" fill="#64748B" stroke="#475569"/>
-    <text x="1300" y="775" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">OpenTelemetry</text>
-    <text x="1300" y="792" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E2E8F0">Traces · audit log · SLOs</text>
-  </g>
-
-  <!-- Users on far right -->
-  <g filter="url(#shadow)">
-    <rect x="1440" y="750" width="60" height="100" rx="4" fill="#08427B" stroke="#052E56"/>
-    <circle cx="1470" cy="780" r="12" fill="#FFF"/>
-    <circle cx="1470" cy="810" r="12" fill="#FFF"/>
-    <circle cx="1470" cy="840" r="12" fill="#FFF"/>
-    <text x="1470" y="870" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Users</text>
-  </g>
-
-  <!-- Cross-boundary arrows -->
-
-  <!-- Enterprise -> Kafka -->
-  <path d="M 280,350 Q 310,350 360,320" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="310" y="338" font-family="Segoe UI, sans-serif" font-size="9" fill="#444">[Kafka]</text>
-
-  <path d="M 280,400 Q 310,400 360,370" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <path d="M 280,430 Q 310,430 360,400" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
-
-  <!-- IoT -> MQTT -> Kafka -->
-  <path d="M 280,610 Q 310,610 360,420" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="300" y="560" font-family="Segoe UI, sans-serif" font-size="9" fill="#444">[MQTT]</text>
-
-  <!-- Kafka -> Batch subnet -->
-  <path d="M 505,320 Q 550,320 600,350" fill="none" stroke="#1168BD" stroke-width="2" marker-end="url(#arrow-blue)"/>
-  <text x="540" y="310" font-family="Segoe UI, sans-serif" font-size="9" fill="#1168BD" font-weight="600">raw.*</text>
-
-  <!-- Kafka -> Stream subnet -->
-  <path d="M 505,420 Q 550,500 600,560" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#arrow-green)"/>
-  <text x="530" y="490" font-family="Segoe UI, sans-serif" font-size="9" fill="#059669" font-weight="600">stream.iot</text>
-
-  <!-- Batch -> M2 -->
-  <path d="M 990,352 Q 1005,352 1020,360" fill="none" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow-green)"/>
-  <text x="992" y="342" font-family="Segoe UI, sans-serif" font-size="9" fill="#059669">graph upsert</text>
-
-  <!-- Stream -> M0 -->
-  <path d="M 990,572 Q 1010,500 1040,360" fill="none" stroke="#DC2626" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="1000" y="480" font-family="Segoe UI, sans-serif" font-size="9" fill="#DC2626">pin state</text>
-
-  <!-- Memory -> Agents -->
-  <path d="M 1240,400 Q 1240,470 1190,540" fill="none" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="1255" y="470" font-family="Segoe UI, sans-serif" font-size="9" fill="#7C3AED">context C_t</text>
-
-  <!-- Stream Observer -> Orchestrator -->
-  <path d="M 990,572 Q 1010,560 1040,572" fill="none" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow-green)"/>
-
-  <!-- User -> API -->
-  <path d="M 260,820 Q 600,820 1040,778" fill="none" stroke="#08427B" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="600" y="812" font-family="Segoe UI, sans-serif" font-size="9" fill="#08427B">[HTTPS]</text>
-
-  <!-- API -> Users -->
-  <line x1="1200" y1="778" x2="1440" y2="800" stroke="#08427B" stroke-width="1.5" marker-end="url(#arrow)"/>
-
-  <!-- Legend -->
-  <rect x="60" y="870" width="1400" height="36" rx="4" fill="#F7FAFC" stroke="#E2E8F0"/>
-  <rect x="80" y="882" width="14" height="14" rx="2" fill="#EBF8FF" stroke="#4299E1"/>
-  <text x="102" y="893" font-family="Segoe UI, sans-serif" font-size="10" fill="#4A5568">Batch path (Spark)</text>
-  <rect x="230" y="882" width="14" height="14" rx="2" fill="#F0FFF4" stroke="#48BB78"/>
-  <text x="252" y="893" font-family="Segoe UI, sans-serif" font-size="10" fill="#4A5568">Stream path (Faust)</text>
-  <rect x="400" y="882" width="14" height="14" rx="2" fill="#FFFFF0" stroke="#D69E2E"/>
-  <text x="422" y="893" font-family="Segoe UI, sans-serif" font-size="10" fill="#4A5568">Memory tiers (M0/M1/M2)</text>
-  <rect x="590" y="882" width="14" height="14" rx="2" fill="#FFFAF0" stroke="#ED8936" stroke-dasharray="4,2"/>
-  <text x="612" y="893" font-family="Segoe UI, sans-serif" font-size="10" fill="#4A5568">Agent orchestration (LangGraph)</text>
-  <rect x="820" y="882" width="14" height="14" rx="2" fill="#231F20" stroke="#000"/>
-  <text x="842" y="893" font-family="Segoe UI, sans-serif" font-size="10" fill="#4A5568">Kafka topics</text>
+ <defs>
+ <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+ <path d="M0,0 L10,5 L0,10 Z" fill="#444"/>
+ </marker>
+ <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+ <path d="M0,0 L10,5 L0,10 Z" fill="#1168BD"/>
+ </marker>
+ <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+ <path d="M0,0 L10,5 L0,10 Z" fill="#059669"/>
+ </marker>
+ <filter id="shadow" x="-2%" y="-2%" width="104%" height="104%">
+ <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.12"/>
+ </filter>
+ <linearGradient id="cloudBg" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stop-color="#FAFBFC"/>
+ <stop offset="100%" stop-color="#F0F4F8"/>
+ </linearGradient>
+ </defs>
+
+ <!-- Background -->
+ <rect width="1520" height="920" fill="#FFFFFF"/>
+
+ <!-- Title -->
+ <text x="760" y="36" text-anchor="middle" font-family="Segoe UI, Open Sans, sans-serif" font-size="22" font-weight="700" fill="#232F3E">The Second Brain - Data Ingestion Pipeline</text>
+ <text x="760" y="58" text-anchor="middle" font-family="Segoe UI, Open Sans, sans-serif" font-size="13" fill="#545B64">Stream-native ingestion | Graph-RAG | Multi-Agent CogOS</text>
+
+ <!-- Top orchestration bar -->
+ <rect x="60" y="78" width="1400" height="72" rx="4" fill="#F7FAFC" stroke="#CBD5E0" stroke-width="1"/>
+ <text x="80" y="100" font-family="Segoe UI, sans-serif" font-size="11" fill="#718096" font-weight="600">ORCHESTRATION</text>
+
+ <!-- Top flow boxes -->
+ <g filter="url(#shadow)">
+ <rect x="100" y="108" width="130" height="32" rx="3" fill="#1168BD" stroke="#0B4884"/>
+ <text x="165" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Doc Crawler</text>
+
+ <rect x="280" y="108" width="130" height="32" rx="3" fill="#1168BD" stroke="#0B4884"/>
+ <text x="345" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Git Webhook</text>
+
+ <rect x="460" y="108" width="130" height="32" rx="3" fill="#1168BD" stroke="#0B4884"/>
+ <text x="525" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Log Shipper</text>
+
+ <rect x="660" y="108" width="130" height="32" rx="3" fill="#64748B" stroke="#475569"/>
+ <text x="725" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">MQTT Bridge</text>
+
+ <rect x="840" y="108" width="180" height="32" rx="3" fill="#231F20" stroke="#000"/>
+ <text x="930" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Kafka Topic Router</text>
+
+ <rect x="1070" y="108" width="180" height="32" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
+ <text x="1160" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Memory Manager Jobs</text>
+
+ <rect x="1300" y="108" width="130" height="32" rx="3" fill="#059669" stroke="#047857"/>
+ <text x="1365" y="129" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">Neo4j Loader</text>
+ </g>
+
+ <!-- Top arrows -->
+ <line x1="230" y1="124" x2="280" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <line x1="410" y1="124" x2="460" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <line x1="590" y1="124" x2="660" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <line x1="790" y1="124" x2="840" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <line x1="1020" y1="124" x2="1070" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <line x1="1250" y1="124" x2="1300" y2="124" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+ <!-- LEFT: External Systems -->
+ <rect x="40" y="170" width="280" height="720" rx="6" fill="url(#cloudBg)" stroke="#A0AEC0" stroke-width="1.5" stroke-dasharray="6,4"/>
+ <text x="60" y="198" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#232F3E">External Systems</text>
+ <text x="60" y="216" font-family="Segoe UI, sans-serif" font-size="11" fill="#718096">Source environment</text>
+
+ <!-- Enterprise box -->
+ <rect x="60" y="235" width="240" height="280" rx="4" fill="#EDF2F7" stroke="#CBD5E0" stroke-width="1"/>
+ <text x="80" y="258" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2D3748">Enterprise Systems</text>
+
+ <g filter="url(#shadow)">
+ <rect x="80" y="275" width="200" height="52" rx="3" fill="#FFF" stroke="#CBD5E0"/>
+ <rect x="92" y="287" width="28" height="28" rx="4" fill="#64748B"/>
+ <text x="106" y="306" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" fill="#FFF">D</text>
+ <text x="130" y="298" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#2D3748">Documents</text>
+ <text x="130" y="314" font-family="Segoe UI, sans-serif" font-size="10" fill="#718096">PDF, MD, Confluence</text>
+
+ <rect x="80" y="340" width="200" height="52" rx="3" fill="#FFF" stroke="#CBD5E0"/>
+ <rect x="92" y="352" width="28" height="28" rx="4" fill="#64748B"/>
+ <text x="106" y="371" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" fill="#FFF">C</text>
+ <text x="130" y="363" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#2D3748">Code Repos</text>
+ <text x="130" y="379" font-family="Segoe UI, sans-serif" font-size="10" fill="#718096">GitHub / GitLab webhooks</text>
+
+ <rect x="80" y="405" width="200" height="52" rx="3" fill="#FFF" stroke="#CBD5E0"/>
+ <rect x="92" y="417" width="28" height="28" rx="4" fill="#64748B"/>
+ <text x="106" y="436" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" fill="#FFF">L</text>
+ <text x="130" y="428" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#2D3748">Structured Logs</text>
+ <text x="130" y="444" font-family="Segoe UI, sans-serif" font-size="10" fill="#718096">App, audit, security</text>
+ </g>
+
+ <!-- IoT box -->
+ <rect x="60" y="540" width="240" height="200" rx="4" fill="#EDF2F7" stroke="#CBD5E0" stroke-width="1"/>
+ <text x="80" y="563" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2D3748">IoT Layer</text>
+
+ <g filter="url(#shadow)">
+ <rect x="80" y="580" width="200" height="52" rx="3" fill="#FFF" stroke="#CBD5E0"/>
+ <rect x="92" y="592" width="28" height="28" rx="4" fill="#64748B"/>
+ <text x="106" y="611" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" fill="#FFF">S</text>
+ <text x="130" y="603" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#2D3748">Sensors &amp; Gateways</text>
+ <text x="130" y="619" font-family="Segoe UI, sans-serif" font-size="10" fill="#718096">MQTT / BACnet telemetry</text>
+
+ <rect x="80" y="645" width="200" height="52" rx="3" fill="#FFF" stroke="#CBD5E0"/>
+ <rect x="92" y="657" width="28" height="28" rx="4" fill="#64748B"/>
+    <text x="106" y="676" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" fill="#FFF">F</text>
+ <text x="130" y="668" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#2D3748">Smart Facility</text>
+ <text x="130" y="684" font-family="Segoe UI, sans-serif" font-size="10" fill="#718096">HVAC, energy, actuators</text>
+ </g>
+
+ <!-- User -->
+ <g filter="url(#shadow)">
+ <rect x="100" y="780" width="160" height="80" rx="4" fill="#08427B" stroke="#052E56"/>
+ <circle cx="145" cy="810" r="16" fill="#FFF" opacity="0.9"/>
+ <text x="145" y="815" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="16">U</text>
+ <text x="200" y="808" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#FFF">User / Operator</text>
+ <text x="200" y="826" font-family="Segoe UI, sans-serif" font-size="10" fill="#BEE3F8">Queries &amp; approvals</text>
+ </g>
+
+ <!-- CENTER: Ingestion replication zone -->
+ <rect x="340" y="170" width="200" height="720" rx="6" fill="#FFFAF0" stroke="#ED8936" stroke-width="1.5" stroke-dasharray="6,4"/>
+ <text x="360" y="198" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#232F3E">Ingestion Plane</text>
+ <text x="360" y="216" font-family="Segoe UI, sans-serif" font-size="11" fill="#718096">Continuous stream replication</text>
+
+ <!-- Kafka cluster -->
+ <rect x="360" y="235" width="160" height="340" rx="4" fill="#FFF5F5" stroke="#FC8181" stroke-width="1"/>
+ <text x="380" y="258" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2D3748">Kafka Cluster</text>
+
+ <g filter="url(#shadow)">
+ <rect x="375" y="275" width="130" height="44" rx="3" fill="#231F20" stroke="#000"/>
+ <text x="440" y="295" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">raw.documents</text>
+ <text x="440" y="309" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#A0AEC0">tenant_id partition</text>
+
+ <rect x="375" y="330" width="130" height="44" rx="3" fill="#231F20" stroke="#000"/>
+ <text x="440" y="350" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">raw.code / raw.logs</text>
+ <text x="440" y="364" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#A0AEC0">repo / service key</text>
+
+ <rect x="375" y="385" width="130" height="44" rx="3" fill="#231F20" stroke="#000"/>
+ <text x="440" y="405" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">stream.iot</text>
+ <text x="440" y="419" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#A0AEC0">device_id partition</text>
+
+ <rect x="375" y="440" width="130" height="44" rx="3" fill="#231F20" stroke="#000"/>
+ <text x="440" y="460" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">derived.entities</text>
+ <text x="440" y="474" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#A0AEC0">entity_id partition</text>
+
+ <rect x="375" y="495" width="130" height="44" rx="3" fill="#231F20" stroke="#000"/>
+ <text x="440" y="515" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">audit.actions</text>
+ <text x="440" y="529" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#A0AEC0">trace_id partition</text>
+ </g>
+
+ <!-- Replication label -->
+ <rect x="365" y="600" width="150" height="56" rx="4" fill="#FFF" stroke="#ED8936" stroke-width="1.5"/>
+ <text x="440" y="622" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" font-weight="600" fill="#C05621">At-least-once delivery</text>
+ <text x="440" y="638" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#718096">Consumer groups + offsets</text>
+ <text x="440" y="652" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#718096">Idempotent MERGE writes</text>
+
+ <!-- RIGHT: CogOS Platform -->
+ <rect x="560" y="170" width="920" height="720" rx="6" fill="url(#cloudBg)" stroke="#A0AEC0" stroke-width="2"/>
+ <!-- Cloud icon -->
+ <ellipse cx="590" cy="192" rx="14" ry="9" fill="#1168BD"/>
+ <ellipse cx="606" cy="190" rx="12" ry="8" fill="#1168BD"/>
+ <ellipse cx="578" cy="190" rx="10" ry="7" fill="#1168BD"/>
+ <text x="630" y="198" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#232F3E">The Second Brain (CogOS Platform)</text>
+ <text x="630" y="216" font-family="Segoe UI, sans-serif" font-size="11" fill="#718096">Processing | Memory | Agent orchestration</text>
+
+ <!-- VPC-like inner boundary -->
+ <rect x="580" y="230" width="880" height="640" rx="4" fill="#FFF" stroke="#718096" stroke-width="1.5"/>
+ <text x="600" y="252" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2D3748">CogOS Runtime VPC</text>
+
+ <!-- Batch Path Subnet (blue) -->
+ <rect x="600" y="265" width="400" height="200" rx="4" fill="#EBF8FF" stroke="#4299E1" stroke-width="1.5"/>
+ <text x="620" y="288" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2B6CB0">Batch Path Subnet</text>
+ <text x="620" y="304" font-family="Segoe UI, sans-serif" font-size="10" fill="#4299E1">Spark Structured Streaming</text>
+
+ <g filter="url(#shadow)">
+ <rect x="620" y="320" width="110" height="64" rx="3" fill="#1168BD" stroke="#0B4884"/>
+ <text x="675" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Spark</text>
+ <text x="675" y="360" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">Chunk + Parse</text>
+ <text x="675" y="374" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">Structured logs</text>
+
+ <rect x="750" y="320" width="110" height="64" rx="3" fill="#1168BD" stroke="#0B4884"/>
+ <text x="805" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">NER / RE</text>
+ <text x="805" y="360" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">Entity + relation</text>
+ <text x="805" y="374" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">extraction</text>
+
+ <rect x="880" y="320" width="110" height="64" rx="3" fill="#1168BD" stroke="#0B4884"/>
+ <text x="935" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Embedding</text>
+ <text x="935" y="360" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">Text / code</text>
+ <text x="935" y="374" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">vectors</text>
+ </g>
+
+ <line x1="730" y1="352" x2="750" y2="352" stroke="#1168BD" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+ <line x1="860" y1="352" x2="880" y2="352" stroke="#1168BD" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+ <!-- Stream Path Subnet (green) -->
+ <rect x="600" y="485" width="400" height="200" rx="4" fill="#F0FFF4" stroke="#48BB78" stroke-width="1.5"/>
+ <text x="620" y="508" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#276749">Stream Path Subnet</text>
+ <text x="620" y="524" font-family="Segoe UI, sans-serif" font-size="10" fill="#48BB78">Faust real-time workers</text>
+
+ <g filter="url(#shadow)">
+ <rect x="620" y="540" width="110" height="64" rx="3" fill="#059669" stroke="#047857"/>
+ <text x="675" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Faust</text>
+ <text x="675" y="580" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">Window agg</text>
+ <text x="675" y="594" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">mean, sigma, rate</text>
+
+ <rect x="750" y="540" width="110" height="64" rx="3" fill="#059669" stroke="#047857"/>
+ <text x="805" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Anomaly</text>
+ <text x="805" y="580" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">|x | &gt; 3</text>
+ <text x="805" y="594" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">detection</text>
+
+ <rect x="880" y="540" width="110" height="64" rx="3" fill="#059669" stroke="#047857"/>
+ <text x="935" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Stream</text>
+ <text x="935" y="572" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Observer</text>
+ <text x="935" y="594" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">Pin + alert</text>
+ </g>
+
+ <line x1="730" y1="572" x2="750" y2="572" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+ <line x1="860" y1="572" x2="880" y2="572" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+ <!-- Memory Subnet -->
+ <rect x="1020" y="265" width="420" height="200" rx="4" fill="#FFFFF0" stroke="#D69E2E" stroke-width="1.5"/>
+ <text x="1040" y="288" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#975A16">Memory Tier Subnet</text>
+ <text x="1040" y="304" font-family="Segoe UI, sans-serif" font-size="10" fill="#D69E2E">M0 / M1 / M2 hierarchical memory</text>
+
+ <g filter="url(#shadow)">
+ <rect x="1040" y="320" width="120" height="80" rx="3" fill="#DC2626" stroke="#B91C1C"/>
+ <text x="1100" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">M0 Working</text>
+ <text x="1100" y="362" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#FECACA">Redis Streams</text>
+ <text x="1100" y="378" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#FECACA">Secondsminutes TTL</text>
+ <text x="1100" y="392" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#FECACA">IoT window state</text>
+
+ <rect x="1180" y="320" width="120" height="80" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
+ <text x="1240" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">M1 Short-Term</text>
+ <text x="1240" y="362" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">LLM context window</text>
+ <text x="1240" y="378" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">Session scratch</text>
+ <text x="1240" y="392" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">Pinned retrieval</text>
+
+ <rect x="1320" y="320" width="100" height="80" rx="3" fill="#059669" stroke="#047857"/>
+ <text x="1370" y="345" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">M2 Long-Term</text>
+ <text x="1370" y="362" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">Neo4j graph</text>
+ <text x="1370" y="378" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">Vector index</text>
+ <text x="1370" y="392" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#C6F6D5">Reflections</text>
+ </g>
+
+ <!-- Agent Orchestration Subnet (dashed orange like autoscaling) -->
+ <rect x="1020" y="485" width="420" height="200" rx="4" fill="#FFFAF0" stroke="#ED8936" stroke-width="2" stroke-dasharray="8,4"/>
+ <text x="1040" y="508" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#C05621">Agent Orchestration Subnet</text>
+ <text x="1040" y="524" font-family="Segoe UI, sans-serif" font-size="10" fill="#ED8936">LangGraph state machine</text>
+
+ <g filter="url(#shadow)">
+ <rect x="1040" y="540" width="90" height="64" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
+ <text x="1085" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Orchestrator</text>
+ <text x="1085" y="582" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">Route tasks</text>
+
+ <rect x="1145" y="540" width="90" height="64" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
+ <text x="1190" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Planner</text>
+ <text x="1190" y="582" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">CoT steps</text>
+
+ <rect x="1250" y="540" width="90" height="64" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
+ <text x="1295" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Tools</text>
+ <text x="1295" y="582" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">Idempotent</text>
+
+ <rect x="1355" y="540" width="70" height="64" rx="3" fill="#7C3AED" stroke="#6D28D9"/>
+ <text x="1390" y="565" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Critic</text>
+ <text x="1390" y="582" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E9D5FF">Verify</text>
+ </g>
+
+ <line x1="1130" y1="572" x2="1145" y2="572" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <line x1="1235" y1="572" x2="1250" y2="572" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <line x1="1340" y1="572" x2="1355" y2="572" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+ <!-- API Gateway + Load Balancer -->
+ <rect x="1020" y="710" width="420" height="140" rx="4" fill="#EDF2F7" stroke="#CBD5E0" stroke-width="1"/>
+ <text x="1040" y="733" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#2D3748">Interface Layer</text>
+
+ <g filter="url(#shadow)">
+ <rect x="1040" y="750" width="160" height="56" rx="3" fill="#1168BD" stroke="#0B4884"/>
+ <text x="1120" y="775" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">FastAPI Gateway</text>
+ <text x="1120" y="792" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#BEE3F8">POST /query | /ingest | /action</text>
+
+ <rect x="1220" y="750" width="160" height="56" rx="3" fill="#64748B" stroke="#475569"/>
+ <text x="1300" y="775" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="11" fill="#FFF" font-weight="600">OpenTelemetry</text>
+ <text x="1300" y="792" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#E2E8F0">Traces | audit log | SLOs</text>
+ </g>
+
+ <!-- Users on far right -->
+ <g filter="url(#shadow)">
+ <rect x="1440" y="750" width="60" height="100" rx="4" fill="#08427B" stroke="#052E56"/>
+ <circle cx="1470" cy="780" r="12" fill="#FFF"/>
+ <circle cx="1470" cy="810" r="12" fill="#FFF"/>
+ <circle cx="1470" cy="840" r="12" fill="#FFF"/>
+ <text x="1470" y="870" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" fill="#FFF" font-weight="600">Users</text>
+ </g>
+
+ <!-- Cross-boundary arrows -->
+
+ <!-- Enterprise -> Kafka -->
+ <path d="M 280,350 Q 310,350 360,320" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <text x="310" y="338" font-family="Segoe UI, sans-serif" font-size="9" fill="#444">[Kafka]</text>
+
+ <path d="M 280,400 Q 310,400 360,370" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <path d="M 280,430 Q 310,430 360,400" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+ <!-- IoT -> MQTT -> Kafka -->
+ <path d="M 280,610 Q 310,610 360,420" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <text x="300" y="560" font-family="Segoe UI, sans-serif" font-size="9" fill="#444">[MQTT]</text>
+
+ <!-- Kafka -> Batch subnet -->
+ <path d="M 505,320 Q 550,320 600,350" fill="none" stroke="#1168BD" stroke-width="2" marker-end="url(#arrow-blue)"/>
+ <text x="540" y="310" font-family="Segoe UI, sans-serif" font-size="9" fill="#1168BD" font-weight="600">raw.*</text>
+
+ <!-- Kafka -> Stream subnet -->
+ <path d="M 505,420 Q 550,500 600,560" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#arrow-green)"/>
+ <text x="530" y="490" font-family="Segoe UI, sans-serif" font-size="9" fill="#059669" font-weight="600">stream.iot</text>
+
+ <!-- Batch -> M2 -->
+ <path d="M 990,352 Q 1005,352 1020,360" fill="none" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+ <text x="992" y="342" font-family="Segoe UI, sans-serif" font-size="9" fill="#059669">graph upsert</text>
+
+ <!-- Stream -> M0 -->
+ <path d="M 990,572 Q 1010,500 1040,360" fill="none" stroke="#DC2626" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <text x="1000" y="480" font-family="Segoe UI, sans-serif" font-size="9" fill="#DC2626">pin state</text>
+
+ <!-- Memory -> Agents -->
+ <path d="M 1240,400 Q 1240,470 1190,540" fill="none" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <text x="1255" y="470" font-family="Segoe UI, sans-serif" font-size="9" fill="#7C3AED">context C_t</text>
+
+ <!-- Stream Observer -> Orchestrator -->
+ <path d="M 990,572 Q 1010,560 1040,572" fill="none" stroke="#059669" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+ <!-- User -> API -->
+ <path d="M 260,820 Q 600,820 1040,778" fill="none" stroke="#08427B" stroke-width="1.5" marker-end="url(#arrow)"/>
+ <text x="600" y="812" font-family="Segoe UI, sans-serif" font-size="9" fill="#08427B">[HTTPS]</text>
+
+ <!-- API -> Users -->
+ <line x1="1200" y1="778" x2="1440" y2="800" stroke="#08427B" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+ <!-- Legend -->
+ <rect x="60" y="870" width="1400" height="36" rx="4" fill="#F7FAFC" stroke="#E2E8F0"/>
+ <rect x="80" y="882" width="14" height="14" rx="2" fill="#EBF8FF" stroke="#4299E1"/>
+ <text x="102" y="893" font-family="Segoe UI, sans-serif" font-size="10" fill="#4A5568">Batch path (Spark)</text>
+ <rect x="230" y="882" width="14" height="14" rx="2" fill="#F0FFF4" stroke="#48BB78"/>
+ <text x="252" y="893" font-family="Segoe UI, sans-serif" font-size="10" fill="#4A5568">Stream path (Faust)</text>
+ <rect x="400" y="882" width="14" height="14" rx="2" fill="#FFFFF0" stroke="#D69E2E"/>
+ <text x="422" y="893" font-family="Segoe UI, sans-serif" font-size="10" fill="#4A5568">Memory tiers (M0/M1/M2)</text>
+ <rect x="590" y="882" width="14" height="14" rx="2" fill="#FFFAF0" stroke="#ED8936" stroke-dasharray="4,2"/>
+ <text x="612" y="893" font-family="Segoe UI, sans-serif" font-size="10" fill="#4A5568">Agent orchestration (LangGraph)</text>
+ <rect x="820" y="882" width="14" height="14" rx="2" fill="#231F20" stroke="#000"/>
+ <text x="842" y="893" font-family="Segoe UI, sans-serif" font-size="10" fill="#4A5568">Kafka topics</text>
 </svg>
