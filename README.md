@@ -16,6 +16,12 @@ Inspired by **MemGPT**, **Generative Agents**, and **Graph-RAG**
 
 [Quick Start](#-quick-start) · [Architecture](#-architecture) · [API](#-api-reference) · [Docs](docs/ARCHITECTURE_WORKFLOW.md)
 
+<br/>
+
+![The Second Brain — Data Ingestion Pipeline (AWS-style architecture)](docs/diagrams/second-brain-pipeline-aws-style.png)
+
+*Stream-native ingestion · Graph-RAG · Multi-Agent CogOS — external systems → Kafka → Spark/Faust → memory tiers → agent orchestration*
+
 </div>
 
 ---
@@ -75,7 +81,9 @@ flowchart TB
 
 Continuous path from external data sources through Kafka into batch (Spark) and stream (Faust) processing subnets, then into memory tiers and agent orchestration.
 
-![Data Ingestion Pipeline — AWS-style architecture](docs/diagrams/ingestion-pipeline-arch.svg)
+![Data Ingestion Pipeline — AWS-style architecture](docs/diagrams/second-brain-pipeline-aws-style.png)
+
+> **Diagram layers:** External Systems → Ingestion Plane (Kafka) → CogOS Runtime VPC (Batch / Stream / Memory / Agents) → Interface Layer (FastAPI + OpenTelemetry)
 
 | Subnet | Color | Components |
 |--------|-------|------------|
@@ -84,6 +92,13 @@ Continuous path from external data sources through Kafka into batch (Spark) and 
 | **Memory Tiers** | Gold | M₀ Redis · M₁ Context · M₂ Neo4j + vectors |
 | **Agent Orchestration** | Orange (dashed) | LangGraph: Orchestrator → Planner → Tools → Critic |
 | **Ingestion Plane** | Orange border | Kafka topics with at-least-once delivery |
+
+<details>
+<summary><strong>Editable SVG source (for docs / presentations)</strong></summary>
+
+![SVG version](docs/diagrams/ingestion-pipeline-arch.svg)
+
+</details>
 
 <details>
 <summary><strong>Pipeline flow (text)</strong></summary>
