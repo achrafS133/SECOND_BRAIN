@@ -1,0 +1,24 @@
+[
+  {
+    "id": "temp-anomaly-setpoint",
+    "device_id": "hvac-zone-a-1",
+    "zone_id": "zone-a",
+    "metric": "temperature",
+    "warmup_values": [22.0, 22.1, 22.0, 22.2, 22.1, 22.0],
+    "anomaly_value": 45.0,
+    "expected_command": "set_setpoint",
+    "expected_policy_pass": true
+  },
+  {
+    "id": "unsafe-setpoint-rejected",
+    "device_id": "hvac-zone-b-1",
+    "zone_id": "zone-b",
+    "metric": "temperature",
+    "warmup_values": [21.0, 21.1, 21.0, 21.2, 21.1, 21.0],
+    "anomaly_value": 50.0,
+    "expected_command": "set_setpoint",
+    "expected_policy_pass": true,
+    "force_value": 35.0,
+    "note": "Proposed setpoint should remain within comfort band"
+  }
+]

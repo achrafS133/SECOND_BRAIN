@@ -1,0 +1,219 @@
+{
+  "generated_at": "2026-06-24T19:12:07.150837",
+  "dataset": "eval\\benchmarks\\enterprise_qa.json",
+  "configurations": [
+    {
+      "name": "flat_rag",
+      "profile": {
+        "name": "flat_rag",
+        "use_working_memory": false,
+        "use_hybrid_scoring": false,
+        "use_graph_edges": false,
+        "use_community_summary": false,
+        "use_critic": false,
+        "vector_only": true
+      },
+      "summary": {
+        "count": 3,
+        "faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "graph_grounding": 0.8333,
+        "latency_ms_p50": 72.78,
+        "latency_ms_p99": 72.78
+      },
+      "results": [
+        {
+          "case_id": "memory-tiers",
+          "query": "What are the memory tiers in The Second Brain?",
+          "answer": "Based on retrieved memory for 'What are the memory tiers in The Second Brain?':\n\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nChecko\n\n(Configure OPENAI_API_KEY for full multi-agent reasoning.)",
+          "faithfulness": 1.0,
+          "answer_relevance": 1.0,
+          "graph_grounding": 1.0,
+          "latency_ms": 183.2142000021122
+        },
+        {
+          "case_id": "checkout-latency",
+          "query": "What should I inspect if checkout latency spikes?",
+          "answer": "Based on retrieved memory for 'What should I inspect if checkout latency spikes?':\n\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Respo\n\n(Configure OPENAI_API_KEY for full multi-agent reasoning.)",
+          "faithfulness": 1.0,
+          "answer_relevance": 1.0,
+          "graph_grounding": 0.5,
+          "latency_ms": 54.911200000788085
+        },
+        {
+          "case_id": "dependency-chain",
+          "query": "Which service does CheckoutService depend on for authorization?",
+          "answer": "Based on retrieved memory for 'Which service does CheckoutService depend on for authorization?':\n\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nChecko\n\n(Configure OPENAI_API_KEY for full multi-agent reasoning.)",
+          "faithfulness": 1.0,
+          "answer_relevance": 1.0,
+          "graph_grounding": 1.0,
+          "latency_ms": 72.78299999961746
+        }
+      ]
+    },
+    {
+      "name": "graph_only",
+      "profile": {
+        "name": "graph_only",
+        "use_working_memory": false,
+        "use_hybrid_scoring": false,
+        "use_graph_edges": true,
+        "use_community_summary": false,
+        "use_critic": false,
+        "vector_only": false
+      },
+      "summary": {
+        "count": 3,
+        "faithfulness": 0.2778,
+        "answer_relevance": 0.6389,
+        "graph_grounding": 0.2778,
+        "latency_ms_p50": 24.39,
+        "latency_ms_p99": 24.39
+      },
+      "results": [
+        {
+          "case_id": "memory-tiers",
+          "query": "What are the memory tiers in The Second Brain?",
+          "answer": "I processed your query 'What are the memory tiers in The Second Brain?' but no long-term evidence was found yet. Ingest documents via POST /ingest/document, then retry.",
+          "faithfulness": 0.16666666666666666,
+          "answer_relevance": 0.5833333333333334,
+          "graph_grounding": 0.3333333333333333,
+          "latency_ms": 30.18540000266512
+        },
+        {
+          "case_id": "checkout-latency",
+          "query": "What should I inspect if checkout latency spikes?",
+          "answer": "I processed your query 'What should I inspect if checkout latency spikes?' but no long-term evidence was found yet. Ingest documents via POST /ingest/document, then retry.",
+          "faithfulness": 0.6666666666666666,
+          "answer_relevance": 0.8333333333333333,
+          "graph_grounding": 0.0,
+          "latency_ms": 23.66289999918081
+        },
+        {
+          "case_id": "dependency-chain",
+          "query": "Which service does CheckoutService depend on for authorization?",
+          "answer": "I processed your query 'Which service does CheckoutService depend on for authorization?' but no long-term evidence was found yet. Ingest documents via POST /ingest/document, then retry.",
+          "faithfulness": 0.0,
+          "answer_relevance": 0.5,
+          "graph_grounding": 0.5,
+          "latency_ms": 24.38599999732105
+        }
+      ]
+    },
+    {
+      "name": "tiered_memory",
+      "profile": {
+        "name": "tiered_memory",
+        "use_working_memory": true,
+        "use_hybrid_scoring": true,
+        "use_graph_edges": true,
+        "use_community_summary": true,
+        "use_critic": false,
+        "vector_only": false
+      },
+      "summary": {
+        "count": 3,
+        "faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "graph_grounding": 0.8333,
+        "latency_ms_p50": 82.09,
+        "latency_ms_p99": 82.09
+      },
+      "results": [
+        {
+          "case_id": "memory-tiers",
+          "query": "What are the memory tiers in The Second Brain?",
+          "answer": "Based on retrieved memory for 'What are the memory tiers in The Second Brain?':\n\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nChecko\n\n(Configure OPENAI_API_KEY for full multi-agent reasoning.)",
+          "faithfulness": 1.0,
+          "answer_relevance": 1.0,
+          "graph_grounding": 1.0,
+          "latency_ms": 392.46120000098017
+        },
+        {
+          "case_id": "checkout-latency",
+          "query": "What should I inspect if checkout latency spikes?",
+          "answer": "Based on retrieved memory for 'What should I inspect if checkout latency spikes?':\n\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Respo\n\n(Configure OPENAI_API_KEY for full multi-agent reasoning.)",
+          "faithfulness": 1.0,
+          "answer_relevance": 1.0,
+          "graph_grounding": 0.5,
+          "latency_ms": 81.8924999985029
+        },
+        {
+          "case_id": "dependency-chain",
+          "query": "Which service does CheckoutService depend on for authorization?",
+          "answer": "Based on retrieved memory for 'Which service does CheckoutService depend on for authorization?':\n\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nChecko\n\n(Configure OPENAI_API_KEY for full multi-agent reasoning.)",
+          "faithfulness": 1.0,
+          "answer_relevance": 1.0,
+          "graph_grounding": 1.0,
+          "latency_ms": 82.09489999717334
+        }
+      ]
+    },
+    {
+      "name": "full_cogos",
+      "profile": {
+        "name": "full_cogos",
+        "use_working_memory": true,
+        "use_hybrid_scoring": true,
+        "use_graph_edges": true,
+        "use_community_summary": true,
+        "use_critic": true,
+        "vector_only": false
+      },
+      "summary": {
+        "count": 3,
+        "faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "graph_grounding": 0.8333,
+        "latency_ms_p50": 73.65,
+        "latency_ms_p99": 73.65
+      },
+      "results": [
+        {
+          "case_id": "memory-tiers",
+          "query": "What are the memory tiers in The Second Brain?",
+          "answer": "Based on retrieved memory for 'What are the memory tiers in The Second Brain?':\n\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nChecko\n\n(Configure OPENAI_API_KEY for full multi-agent reasoning.)",
+          "faithfulness": 1.0,
+          "answer_relevance": 1.0,
+          "graph_grounding": 1.0,
+          "latency_ms": 81.48670000082348
+        },
+        {
+          "case_id": "checkout-latency",
+          "query": "What should I inspect if checkout latency spikes?",
+          "answer": "Based on retrieved memory for 'What should I inspect if checkout latency spikes?':\n\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Response\nIf checkout latency spikes, inspect PaymentGateway upstream dependencies and BillingService deploy events.\n- ## Incident Respo\n\n(Configure OPENAI_API_KEY for full multi-agent reasoning.)",
+          "faithfulness": 1.0,
+          "answer_relevance": 1.0,
+          "graph_grounding": 0.5,
+          "latency_ms": 64.10880000112229
+        },
+        {
+          "case_id": "dependency-chain",
+          "query": "Which service does CheckoutService depend on for authorization?",
+          "answer": "Based on retrieved memory for 'Which service does CheckoutService depend on for authorization?':\n\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nThe Second Brain uses M0 working memory for IoT streams, M1 short-term in-context memory, and M2 long-term Neo4j graph memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nCheckoutService depends on PaymentGateway for transaction authorization.\n- ## Memory Tiers\nM0 working memory handles IoT streams. M1 short-term is the in-context window. M2 long-term stores graph and vector memory.\nChecko\n\n(Configure OPENAI_API_KEY for full multi-agent reasoning.)",
+          "faithfulness": 1.0,
+          "answer_relevance": 1.0,
+          "graph_grounding": 1.0,
+          "latency_ms": 73.64869999946677
+        }
+      ]
+    }
+  ],
+  "delta_vs_flat_rag": {
+    "graph_only": {
+      "faithfulness": -0.7222,
+      "answer_relevance": -0.3611,
+      "graph_grounding": -0.5555
+    },
+    "tiered_memory": {
+      "faithfulness": 0.0,
+      "answer_relevance": 0.0,
+      "graph_grounding": 0.0
+    },
+    "full_cogos": {
+      "faithfulness": 0.0,
+      "answer_relevance": 0.0,
+      "graph_grounding": 0.0
+    }
+  }
+}

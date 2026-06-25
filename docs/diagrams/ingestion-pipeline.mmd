@@ -1,0 +1,79 @@
+---
+title: The Second Brain — Data Ingestion Pipeline
+config:
+  theme: base
+  themeVariables:
+    primaryColor: "#1168BD"
+    primaryTextColor: "#FFFFFF"
+    primaryBorderColor: "#0B4884"
+    secondaryColor: "#E8F4FC"
+    tertiaryColor: "#F5F7FA"
+    lineColor: "#444444"
+    fontFamily: "Segoe UI, Open Sans, sans-serif"
+---
+flowchart LR
+    subgraph Sources["Data Sources"]
+        direction TB
+        DS1["Documents"]
+        DS2["Code Repos"]
+        DS3["Structured Logs"]
+        DS4["IoT Telemetry"]
+    end
+
+    subgraph Ingest["Ingestion Layer"]
+        direction TB
+        MQTT["MQTT Bridge"]
+        K1["Kafka raw.documents"]
+        K2["Kafka raw.code / raw.logs"]
+        K3["Kafka stream.iot"]
+    end
+
+    subgraph Process["Processing"]
+        direction TB
+        SPARK["Spark Structured Streaming<br/>Chunk · Parse · NER"]
+        FAUST["Faust Workers<br/>Window Aggregate · Anomaly"]
+        EMB["Embedding Service"]
+    end
+
+    subgraph Memory["Cognitive Memory"]
+        direction TB
+        M0["M₀ Working Memory<br/>Redis"]
+        M2["M₂ Long-Term<br/>Neo4j + Vector Index"]
+    end
+
+    subgraph Agents["Agent Layer"]
+        direction TB
+        SO["Stream Observer"]
+        ORCH["Orchestrator"]
+        MM["Memory Manager"]
+    end
+
+    DS1 --> K1
+    DS2 --> K2
+    DS3 --> K2
+    DS4 --> MQTT --> K3
+
+    K1 --> SPARK
+    K2 --> SPARK
+    K3 --> FAUST
+
+    SPARK --> EMB
+    EMB --> M2
+    FAUST --> M0
+    FAUST --> SO
+    SO --> ORCH
+    M0 --> MM
+    M2 --> MM
+    MM --> ORCH
+
+    classDef source fill:#64748B,stroke:#475569,color:#fff
+    classDef kafka fill:#231F20,stroke:#000,color:#fff
+    classDef process fill:#1168BD,stroke:#0B4884,color:#fff
+    classDef memory fill:#059669,stroke:#047857,color:#fff
+    classDef agent fill:#7C3AED,stroke:#6D28D9,color:#fff
+
+    class DS1,DS2,DS3,DS4 source
+    class K1,K2,K3,MQTT kafka
+    class SPARK,FAUST,EMB process
+    class M0,M2 memory
+    class SO,ORCH,MM agent

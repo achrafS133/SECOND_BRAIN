@@ -1,0 +1,20 @@
+[
+  {
+    "id": "memory-tiers",
+    "query": "What are the memory tiers in The Second Brain?",
+    "expected_keywords": ["M0", "M1", "M2", "working", "short-term", "long-term"],
+    "expected_entities": ["Working Memory", "Short-Term", "Long-Term"]
+  },
+  {
+    "id": "checkout-latency",
+    "query": "What should I inspect if checkout latency spikes?",
+    "expected_keywords": ["PaymentGateway", "checkout", "latency"],
+    "expected_entities": ["PaymentGateway", "CheckoutService"]
+  },
+  {
+    "id": "dependency-chain",
+    "query": "Which service does CheckoutService depend on for authorization?",
+    "expected_keywords": ["PaymentGateway", "depends"],
+    "expected_entities": ["CheckoutService", "PaymentGateway"]
+  }
+]

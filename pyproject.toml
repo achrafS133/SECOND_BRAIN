@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "second-brain"
+version = "0.4.0"
+description = "Open-source Cognitive Operating System — multi-agent orchestration with hierarchical memory"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Second Brain Contributors" }]
+keywords = ["agents", "langgraph", "graph-rag", "memory", "kafka", "neo4j"]
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.6.0",
+    "python-dotenv>=1.0.0",
+    "httpx>=0.27.0",
+    "langgraph>=0.2.0",
+    "langchain-core>=0.3.0",
+    "langchain-openai>=0.2.0",
+    "langchain-community>=0.3.0",
+    "neo4j>=5.25.0",
+    "redis>=5.2.0",
+    "aiokafka>=0.11.0",
+    "numpy>=2.1.0",
+    "sentence-transformers>=3.3.0",
+    "opentelemetry-api>=1.28.0",
+    "opentelemetry-sdk>=1.28.0",
+    "opentelemetry-instrumentation-fastapi>=0.49b0",
+    "structlog>=24.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+]
+faust = [
+    "faust-streaming>=0.11.0",
+    "mode-streaming>=0.4.0",
+]
+spark = [
+    "pyspark>=3.5.0",
+]
+mqtt = [
+    "paho-mqtt>=2.1.0",
+]
+
+[project.scripts]
+second-brain = "second_brain.cli:main"
+second-brain-api = "second_brain.api.main:run"
+second-brain-bootstrap = "second_brain.graph.schema.bootstrap:main"
+second-brain-pipeline = "second_brain.ingestion.kafka.pipeline:main"
+second-brain-seed = "second_brain.scripts.seed:main"
+second-brain-eval = "second_brain.eval.run_benchmark:main"
+second-brain-ablation = "second_brain.eval.run_ablation:main"
+second-brain-iot-eval = "second_brain.eval.run_iot_benchmark:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+ignore_missing_imports = true

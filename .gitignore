@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.env
+.python-version
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Data & logs
+data/
+logs/
+*.log
+out.html
+
+# Docker
+infra/volumes/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/

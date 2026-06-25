@@ -1,0 +1,17 @@
+C4Context
+    title System Context diagram for The Second Brain CogOS
+
+    Person(user, "User / Operator", "Queries knowledge and approves high-risk actions")
+    System(cogos, "The Second Brain", "Multi-agent orchestration, tiered memory, hybrid retrieval")
+
+    System_Ext(enterprise, "Enterprise Systems", "Documentation, code repos, structured logs, REST APIs")
+    System_Ext(iot, "IoT Layer", "Sensors, actuators, and telemetry gateways")
+    System_Ext(facility, "Smart Facility", "HVAC, energy, and building control plane")
+    System_Ext(llm, "LLM Providers", "Open-weight or hosted inference APIs")
+
+    Rel(user, cogos, "Queries and commands", "HTTPS")
+    Rel(enterprise, cogos, "Publishes docs, logs, and events", "Kafka")
+    Rel(iot, cogos, "Streams telemetry", "MQTT")
+    Rel(cogos, facility, "Sends control actions", "BACnet")
+    Rel(cogos, llm, "Requests reasoning and extraction", "HTTPS")
+    Rel(cogos, enterprise, "Executes tools and creates tickets", "REST")
