@@ -16,13 +16,7 @@ Inspired by **MemGPT**, **Generative Agents**, and **Graph-RAG**
 
 [Quick Start](#-quick-start) · [Architecture](#-architecture) · [API](#-api-reference) · [Docs](docs/ARCHITECTURE_WORKFLOW.md)
 
-<br/>
 
-![The Second Brain — Data Ingestion Pipeline (AWS-style architecture)](docs/diagrams/second-brain-pipeline-aws-style.png)
-
-*Stream-native ingestion · Graph-RAG · Multi-Agent CogOS — external systems → Kafka → Spark/Faust → memory tiers → agent orchestration*
-
-</div>
 
 ---
 
