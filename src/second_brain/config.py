@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     app_env: str = "development"
     log_level: str = "INFO"
     api_host: str = "0.0.0.0"
-    api_port: int = 8088
+    api_port: int = 8090
 
     llm_provider: str = "openai"  # openai | nvidia | ollama
     llm_model: str = "gpt-4o-mini"

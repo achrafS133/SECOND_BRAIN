@@ -119,10 +119,14 @@ class ServiceContainer:
             )
         return chunk_ids
 
+    async def ingest_from_kafka(self, body: IngestDocumentRequest) -> list[str]:
+        """Ingest from Kafka worker without re-publishing (avoids ingest loops)."""
+        return await self.loader.ingest(body)
+
     async def build_communities(self) -> dict:
         return self.communities.build_summaries()
 
-    async def process_iot(self, event: IoTTelemetryEvent) -> dict:
+    async def process_iot(self, event: IoTTelemetryEvent, *, publish_kafka: bool = True) -> dict:
         observation = self.stream_observer.observe(event)
         await self.working.update_iot_window(event.device_id, observation["stats"])
 
@@ -159,7 +163,7 @@ class ServiceContainer:
             if action.status == ActionStatus.EXECUTED:
                 result["execution_result"] = action.execution_result
 
-        if self._kafka:
+        if publish_kafka and self._kafka:
             await self._kafka.send_and_wait(
                 TOPICS.STREAM_IOT,
                 value=event.model_dump_json().encode(),

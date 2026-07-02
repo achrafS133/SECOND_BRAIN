@@ -602,7 +602,7 @@
         <div class="panel-head">
           <h2>Reasoning Engine</h2>
           <div class="model-tag">
-            Model <strong id="llm-badge">NEMOTRON-4 340B</strong>
+            Model <strong id="llm-badge">NEMOTRON-3-ULTRA-550B-A55B</strong>
             <button class="icon-btn" title="Model info">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8.01"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
             </button>
@@ -782,6 +782,12 @@
       document.getElementById('sys-nominal').className = 'dot' + (ok ? ' on' : '');
       document.getElementById('footer-ok').textContent = ok ? 'All Systems Nominal' : 'Degraded';
       document.getElementById('footer-ok').className = ok ? 'ok' : '';
+      if (d.llm_configured && d.llm_model) {
+        const short = d.llm_model.split('/').pop().toLowerCase();
+        const badge = d.llm_model.split('/').pop().toUpperCase().replace(/-/g, '-');
+        document.getElementById('header-llm').textContent = short;
+        document.getElementById('llm-badge').textContent = badge;
+      }
     } catch {
       ['redis-health','neo4j-health','kafka-health'].forEach(id => setDot(id, false));
     }
@@ -817,7 +823,7 @@
       ['Retrieval Planner', 'Planned retrieval across memory docs, graph nodes, and stream state.', 'done'],
       ['Vector Search', 'Searched M1-Documents (top_k=8) · 14 hits · latency: 89ms', 'done'],
       ['Context Assembler', 'Assembled context (14 sources) · 3,102 tokens', 'done'],
-      ['Reasoning Engine', 'Generating response with nemotron-4 340B.', 'done'],
+      ['Reasoning Engine', 'Generating response with nemotron-3-ultra-550b-a55b.', 'done'],
       ['Response Delivered', '', 'active'],
     ];
     const ul = document.getElementById('trace-steps');
@@ -831,7 +837,6 @@
     if (!query) return;
     input.value = '';
 
-    // Clear demo messages after first real query
     const chat = document.getElementById('chat-history');
     if (chat.querySelector('.msg-av.user') && chat.children.length <= 2) {
       chat.innerHTML = '';
@@ -840,14 +845,33 @@
     appendMsg('User', query, 'user');
     const ul = document.getElementById('trace-steps');
     ul.innerHTML = '';
-    let active = addStep('User Query', `"${query.substring(0,90)}${query.length>90?'...':''}"`, 'active');
-    setTimeout(() => { active.className = 'tl-item done'; active.querySelector('.tl-icon').innerHTML = CHECK; }, 100);
+    const steps = new Map();
 
-    addStep('Query Classifier', `Domain: ${document.getElementById('task-type').value}`, 'done');
-    active = addStep('Retrieval Planner', 'Strategy: hybrid_vector_graph · top_k=8', 'active');
+    function upsertStep(name, desc, state) {
+      const key = name.toLowerCase();
+      let li = steps.get(key);
+      if (!li) {
+        li = addStep(name, desc, state);
+        steps.set(key, li);
+        return li;
+      }
+      li.className = `tl-item ${state}`;
+      li.querySelector('.tl-icon').innerHTML = state === 'done' ? CHECK : '';
+      if (desc) {
+        let descEl = li.querySelector('.tl-desc');
+        if (!descEl) {
+          descEl = document.createElement('div');
+          descEl.className = 'tl-desc';
+          li.appendChild(descEl);
+        }
+        descEl.textContent = desc;
+      }
+      li.scrollIntoView({ block: 'nearest' });
+      return li;
+    }
 
     try {
-      const data = await (await fetch('/query', {
+      const resp = await fetch('/query/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -855,21 +879,31 @@
           session_id: document.getElementById('session-id').value,
           task_type: document.getElementById('task-type').value
         })
-      })).json();
+      });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 
-      active.className = 'tl-item done';
-      active.querySelector('.tl-icon').innerHTML = CHECK;
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
 
-      addStep('Vector Search', `Evidence nodes: ${data.evidence?.nodes?.length || 0}`, 'done');
-      addStep('Context Assembler', `Critic: ${data.critic_verdict}`, 'done');
-      addStep('Reasoning Engine', (data.plan || ['LLM synthesis']).join(' · '), 'done');
-      if (data.audit_trail?.length) {
-        data.audit_trail.forEach(e => addStep(e.action.replace(/_/g,' '), `${e.agent}`, 'done'));
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const parts = buffer.split('\n\n');
+        buffer = parts.pop() || '';
+        for (const chunk of parts) {
+          const line = chunk.trim();
+          if (!line.startsWith('data:')) continue;
+          const data = JSON.parse(line.replace(/^data:\s*/, ''));
+          if (data.event === 'complete') {
+            appendMsg('CogOS', data.response.answer, 'agent');
+          } else {
+            upsertStep(data.name, data.desc, data.state);
+          }
+        }
       }
-      addStep('Response Delivered', `${data.answer.length} chars`, 'done');
-      appendMsg('CogOS', data.answer, 'agent');
     } catch (err) {
-      active.className = 'tl-item done';
       addStep('Error', err.message, 'done');
       appendMsg('System', err.message, 'agent');
     }

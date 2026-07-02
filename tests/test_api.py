@@ -13,12 +13,12 @@ def test_health_endpoint():
         assert "services" in body
 
 
-def test_root_redirects_to_dashboard():
+def test_root_serves_dashboard():
     app = create_app()
     with TestClient(app) as client:
-        response = client.get("/", follow_redirects=False)
-        assert response.status_code == 307
-        assert response.headers["location"] == "/static/index.html"
+        response = client.get("/")
+        assert response.status_code == 200
+        assert "CogOS" in response.text
 
 
 def test_dashboard_static_page():
@@ -28,3 +28,18 @@ def test_dashboard_static_page():
         assert response.status_code == 200
         assert "CogOS" in response.text
         assert "Reasoning Engine" in response.text
+
+
+def test_query_stream_endpoint():
+    app = create_app()
+    with TestClient(app) as client:
+        with client.stream(
+            "POST",
+            "/query/stream",
+            json={"query": "What is M0 working memory?", "session_id": "test-stream"},
+        ) as response:
+            assert response.status_code == 200
+            assert "text/event-stream" in response.headers.get("content-type", "")
+            body = "".join(response.iter_text())
+            assert "User Query" in body
+            assert "complete" in body

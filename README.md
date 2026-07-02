@@ -13,8 +13,11 @@
 [![Neo4j](https://img.shields.io/badge/graph-Neo4j-018BFF?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com/)
 [![Kafka](https://img.shields.io/badge/streaming-Kafka-231F20?style=flat-square&logo=apache-kafka&logoColor=white)](https://kafka.apache.org/)
 [![FastAPI](https://img.shields.io/badge/api-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![NVIDIA NIM](https://img.shields.io/badge/LLM-Nemotron%203%20Ultra-76B900?style=flat-square&logo=nvidia&logoColor=white)](https://build.nvidia.com/)
 
 Inspired by [MemGPT](https://arxiv.org/abs/2310.08560) · [Generative Agents](https://arxiv.org/abs/2304.03442) · [Graph-RAG](https://arxiv.org/abs/2404.16130)
+
+**Default reasoning model:** [`nvidia/nemotron-3-ultra-550b-a55b`](https://build.nvidia.com/) via NVIDIA NIM (OpenAI-compatible). Swap to OpenAI or Ollama with `LLM_PROVIDER`.
 
 [**Get Started**](#quick-start) · [**Dashboard**](#web-dashboard) · [**Architecture**](#architecture) · [**Testing**](#testing) · [**API**](#api-reference) · [**Full Docs**](docs/ARCHITECTURE_WORKFLOW.md)
 
@@ -259,13 +262,15 @@ cp .env.example .env
 .\scripts\start-infra.ps1          # Windows
 docker compose -f infra/docker-compose.yml up -d   # Linux/macOS
 
-# 2. Start API
-second-brain-api
+# 2. Start API (skip if already running on 8090)
+python -m uvicorn second_brain.api.main:app --host 0.0.0.0 --port 8090
 
-# 3. Seed sample data & run a query
+# 3. Seed sample data & run a query (NVIDIA Nemotron 3 Ultra when LLM_PROVIDER=nvidia)
 second-brain-seed
 second-brain query "What is the memory tier model?"
 ```
+
+> **LLM:** Set `LLM_PROVIDER=nvidia` and `LLM_MODEL=nvidia/nemotron-3-ultra-550b-a55b` in `.env` (see [Configuration](#configuration)). Get an API key from [NVIDIA NIM](https://build.nvidia.com/).
 
 ### Services (with Docker)
 
@@ -293,7 +298,7 @@ SpaceX-inspired **Mission Control** UI — chat with the reasoning engine, strea
 
 </div>
 
-<p align="center"><em>Mission Control · Telemetry · Memory Systems — powered by NVIDIA Nemotron / OpenAI / Ollama</em></p>
+<p align="center"><em>Mission Control · Telemetry · Memory Systems — powered by <strong>NVIDIA Nemotron 3 Ultra</strong> (550B MoE) · OpenAI · Ollama</em></p>
 
 | Tab | What you can do |
 |-----|-----------------|
@@ -309,13 +314,26 @@ Open after starting the API: **http://localhost:8090/** (or your `API_PORT` in `
 
 Copy `.env.example` to `.env` and adjust as needed.
 
+### Recommended LLM setup (NVIDIA Nemotron 3 Ultra)
+
+This project is tested and tuned with **NVIDIA NIM** and **`nvidia/nemotron-3-ultra-550b-a55b`**:
+
+```env
+LLM_PROVIDER=nvidia
+LLM_MODEL=nvidia/nemotron-3-ultra-550b-a55b
+NVIDIA_API_KEY=nvapi-your-key-here
+NVIDIA_BASE_URL=https://integrate.api.nvidia.com/v1
+```
+
+Optional: set `LLM_ENABLE_THINKING=true` for extended reasoning on supported NIM deployments.
+
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `LLM_PROVIDER` | `openai` | LLM backend: `openai`, `nvidia`, or `ollama` |
-| `LLM_MODEL` | `gpt-4o-mini` | Model name (overrides provider default when set) |
-| `OPENAI_API_KEY` | — | OpenAI API key |
-| `NVIDIA_API_KEY` | — | NVIDIA NIM key (`integrate.api.nvidia.com`) |
-| `NVIDIA_MODEL` | `nvidia/nemotron-3-ultra-550b-a55b` | NVIDIA model slug |
+| `LLM_PROVIDER` | `nvidia` | LLM backend: `openai`, `nvidia`, or `ollama` |
+| `LLM_MODEL` | `nvidia/nemotron-3-ultra-550b-a55b` | Active model (overrides provider default when set) |
+| `OPENAI_API_KEY` | — | OpenAI API key (when `LLM_PROVIDER=openai`) |
+| `NVIDIA_API_KEY` | — | NVIDIA NIM key ([integrate.api.nvidia.com](https://integrate.api.nvidia.com/)) |
+| `NVIDIA_MODEL` | `nvidia/nemotron-3-ultra-550b-a55b` | Fallback NVIDIA slug if `LLM_MODEL` is empty |
 | `OLLAMA_BASE_URL` | `http://localhost:11434/v1` | Local Ollama OpenAI-compatible endpoint |
 | `OLLAMA_MODEL` | `llama3.2` | Ollama model tag |
 | `NEO4J_URI` | `bolt://localhost:7687` | Graph database connection |
@@ -335,9 +353,10 @@ Interactive docs: **http://localhost:8090/docs**
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `GET` | `/` | Web control center (redirects to dashboard) |
-| `GET` | `/health` | Service health & dependency status |
-| `POST` | `/query` | Evidence-grounded Q&A |
+| `GET` | `/` | Web dashboard (Mission Control UI) |
+| `GET` | `/health` | Service health, LLM provider/model, dependency status |
+| `POST` | `/query` | Evidence-grounded Q&A (Nemotron / OpenAI / Ollama) |
+| `POST` | `/query/stream` | Same as `/query` with **SSE live execution trace** |
 | `POST` | `/ingest/document` | Ingest text into M₂ graph |
 | `POST` | `/stream/iot` | Push IoT telemetry event |
 | `POST` | `/memory/consolidate` | Promote session → long-term |
@@ -356,12 +375,20 @@ curl -X POST http://localhost:8090/ingest/document \
   -d '{"uri":"doc://test","title":"Test","content":"The Second Brain uses M0, M1, and M2 memory tiers."}'
 ```
 
-**Query**
+**Query (Nemotron 3 Ultra)**
 
 ```bash
 curl -X POST http://localhost:8090/query \
   -H "Content-Type: application/json" \
-  -d '{"query":"Explain the memory tiers","session_id":"demo-1"}'
+  -d '{"query":"Explain the memory tiers","session_id":"demo-1","task_type":"qa"}'
+```
+
+**Live trace (SSE)**
+
+```bash
+curl -N -X POST http://localhost:8090/query/stream \
+  -H "Content-Type: application/json" \
+  -d '{"query":"Explain M0 memory tiers","session_id":"demo-1"}'
 ```
 
 **IoT telemetry**
@@ -391,7 +418,7 @@ curl -X POST http://localhost:8090/actions/{action_id}/approve \
 | `second-brain query "<text>"` | Run a CLI query |
 | `second-brain-seed` | Seed sample knowledge + IoT demo |
 | `second-brain-bootstrap` | Initialize Neo4j schema |
-| `second-brain-pipeline` | Kafka document pipeline worker |
+| `second-brain-pipeline` | Kafka document pipeline worker (`second-brain-pipeline iot` for IoT) |
 | `second-brain-eval` | Enterprise QA benchmark |
 | `second-brain-ablation` | Flat RAG vs full CogOS ablation study |
 | `second-brain-iot-eval` | IoT action correctness benchmark |
@@ -512,7 +539,7 @@ SECOND_BRAIN/
 | Working memory | Redis Streams |
 | Embeddings | sentence-transformers |
 | Observability | OpenTelemetry + structlog |
-| LLM | OpenAI · NVIDIA NIM · Ollama (via `LLM_PROVIDER`) |
+| LLM | **NVIDIA NIM** (`nvidia/nemotron-3-ultra-550b-a55b` default) · OpenAI · Ollama |
 
 ---
 
@@ -549,8 +576,23 @@ python scripts/fix_svg.py
 | **5** Benchmarks | ✅ | Community summaries, enterprise QA scorers |
 | **6** Paper & MQTT | ✅ | Ablation runner, IoT benchmark, MQTT bridge |
 | **7** Web UI & LLM | ✅ | SpaceX-style dashboard, multi-provider LLM (OpenAI / NVIDIA / Ollama), `test-api.ps1` |
+| **8** Production & Streaming | ✅ | Dockerfile, GitHub Actions CI, Kafka workers, SSE live trace, eval reports |
 
----
+### Phase 8 quick start
+
+```powershell
+# Full stack (infra + API + Kafka workers)
+docker compose -f infra/docker-compose.yml --profile app up -d --build
+
+# Run benchmarks (requires LLM key in .env)
+.\scripts\run-eval.ps1
+
+# Live trace query (SSE)
+curl -N -X POST http://localhost:8090/query/stream \
+  -H "Content-Type: application/json" \
+  -d '{"query":"Explain M0 memory tiers","session_id":"demo-1"}'
+```
+
 
 ## Contributing & License
 

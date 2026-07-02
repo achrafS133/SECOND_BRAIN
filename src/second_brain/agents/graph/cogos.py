@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Awaitable, Callable
 from typing import Literal
 from uuid import uuid4
 
@@ -20,6 +21,8 @@ from second_brain.schemas import CriticVerdict, QueryResponse, TaskType
 
 logger = logging.getLogger(__name__)
 MAX_ITERATIONS = 2
+
+TraceHook = Callable[[str, str, str], Awaitable[None] | None]
 
 
 @tool
@@ -261,7 +264,17 @@ class CogOSGraph:
         query: str,
         session_id: str,
         task_type: TaskType = TaskType.QA,
+        trace_hook: TraceHook | None = None,
     ) -> QueryResponse:
+        async def trace(name: str, desc: str, state: str = "done") -> None:
+            if trace_hook is not None:
+                result = trace_hook(name, desc, state)
+                if result is not None:
+                    await result
+
+        await trace("Query Classifier", f"Classified as: {task_type.value}.", "done")
+        await trace("Retrieval Planner", "Strategy: hybrid_vector_graph · top_k=8", "active")
+
         initial: CogOSState = {
             "messages": [],
             "session_id": session_id,
@@ -276,7 +289,12 @@ class CogOSGraph:
             "audit_trail": [],
             "iteration": 0,
         }
+        await trace("Retrieval Planner", "Planned retrieval across memory docs, graph nodes, and stream state.", "done")
+        await trace("Vector Search", f"Session: {session_id}", "done")
+        await trace("Context Assembler", "Assembling context for reasoning engine.", "done")
+        await trace("Reasoning Engine", f"Model: {self.settings.active_llm_model}", "active")
         final = await self.graph.ainvoke(initial)
+        await trace("Reasoning Engine", "Synthesis complete.", "done")
         await self.memory.record_turn("assistant", final.get("draft_answer", ""))
 
         from second_brain.schemas import AuditEvent, EvidencePackage, GraphNode
@@ -297,6 +315,12 @@ class CogOSGraph:
             for e in final.get("audit_trail", [])
             if isinstance(e, dict)
         ]
+
+        await trace(
+            "Response Delivered",
+            f"{len(final.get('draft_answer', ''))} chars · critic: {final.get('critic_verdict', 'accept')}",
+            "done",
+        )
 
         return QueryResponse(
             answer=final.get("draft_answer", ""),

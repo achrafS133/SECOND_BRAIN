@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import asyncio
+import json
 import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from pydantic import BaseModel
@@ -89,6 +91,49 @@ def create_app() -> FastAPI:
         )
         return response
 
+    @app.post("/query/stream")
+    async def query_stream(body: QueryRequest) -> StreamingResponse:
+        container: ServiceContainer = app.state.container
+        queue: asyncio.Queue[dict] = asyncio.Queue()
+
+        async def trace_hook(name: str, desc: str, state: str = "done") -> None:
+            await queue.put({"name": name, "desc": desc, "state": state})
+
+        async def generate():
+            yield f"data: {json.dumps({'name': 'User Query', 'desc': body.query[:120], 'state': 'done'})}\n\n"
+
+            task = asyncio.create_task(
+                container.cogos.run(
+                    query=body.query,
+                    session_id=body.session_id,
+                    task_type=body.task_type,
+                    trace_hook=trace_hook,
+                )
+            )
+
+            while True:
+                if task.done() and queue.empty():
+                    break
+                try:
+                    step = await asyncio.wait_for(queue.get(), timeout=0.25)
+                    yield f"data: {json.dumps(step)}\n\n"
+                except asyncio.TimeoutError:
+                    continue
+
+            response = await task
+            await container.record_session_observation(
+                body.session_id,
+                f"Q: {body.query}\nA: {response.answer[:500]}",
+                importance=0.65,
+            )
+            payload = {
+                "event": "complete",
+                "response": json.loads(response.model_dump_json()),
+            }
+            yield f"data: {json.dumps(payload)}\n\n"
+
+        return StreamingResponse(generate(), media_type="text/event-stream")
+
     @app.post("/ingest/document")
     async def ingest_document(body: IngestDocumentRequest) -> dict:
         container: ServiceContainer = app.state.container
@@ -134,14 +179,17 @@ def create_app() -> FastAPI:
         except KeyError as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
 
-    # Mount static dashboard
     static_dir = Path(__file__).parent / "static"
-    if static_dir.exists():
-        app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    index_path = static_dir / "index.html"
 
     @app.get("/")
     async def root():
-        return RedirectResponse(url="/static/index.html")
+        if index_path.exists():
+            return FileResponse(index_path, media_type="text/html")
+        raise HTTPException(status_code=404, detail="Dashboard not found")
+
+    if static_dir.exists():
+        app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
     return app
 

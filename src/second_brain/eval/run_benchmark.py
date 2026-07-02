@@ -47,9 +47,30 @@ async def run_benchmark(dataset_path: Path | None = None) -> dict:
 
 
 def main() -> None:
+    import argparse
+    from datetime import datetime
+
+    parser = argparse.ArgumentParser(description="Run enterprise QA benchmark")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=None,
+        help="Write JSON report to this path (default: eval/reports/benchmark_<timestamp>.json)",
+    )
+    args = parser.parse_args()
+
     logging.basicConfig(level=logging.INFO)
     output = asyncio.run(run_benchmark())
-    print(json.dumps(output, indent=2))
+
+    out_path = args.output
+    if out_path is None:
+        ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        out_path = Path("eval/reports") / f"benchmark_{ts}.json"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(output, indent=2), encoding="utf-8")
+
+    print(json.dumps(output["summary"], indent=2))
+    print(f"\nReport saved to {out_path}")
 
 
 if __name__ == "__main__":
