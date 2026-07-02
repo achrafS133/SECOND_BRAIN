@@ -271,9 +271,9 @@ second-brain query "What is the memory tier model?"
 
 | Service | URL | Default credentials |
 |---------|-----|---------------------|
-| **Web dashboard** | http://localhost:8088/ | — |
-| **API docs** | http://localhost:8088/docs | — |
-| **Health check** | http://localhost:8088/health | — |
+| **Web dashboard** | http://localhost:8090/ | — |
+| **API docs** | http://localhost:8090/docs | — |
+| **Health check** | http://localhost:8090/health | — |
 | **Neo4j Browser** | http://localhost:7474 | `neo4j` / `secondbrain_dev` |
 | **Kafka** | `localhost:9092` | — |
 | **Redis** | `localhost:6379` | — |
@@ -301,7 +301,7 @@ SpaceX-inspired **Mission Control** UI — chat with the reasoning engine, strea
 | **Telemetry** | Push IoT readings, simulate anomalies, approve actions |
 | **Memory Systems** | Ingest documents, consolidate sessions, build Graph-RAG summaries |
 
-Open after starting the API: **http://localhost:8088/** (or your `API_PORT` in `.env`).
+Open after starting the API: **http://localhost:8090/** (or your `API_PORT` in `.env`).
 
 ---
 
@@ -331,7 +331,7 @@ Copy `.env.example` to `.env` and adjust as needed.
 
 ## API Reference
 
-Interactive docs: **http://localhost:8088/docs**
+Interactive docs: **http://localhost:8090/docs**
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -351,7 +351,7 @@ Interactive docs: **http://localhost:8088/docs**
 **Ingest a document**
 
 ```bash
-curl -X POST http://localhost:8088/ingest/document \
+curl -X POST http://localhost:8090/ingest/document \
   -H "Content-Type: application/json" \
   -d '{"uri":"doc://test","title":"Test","content":"The Second Brain uses M0, M1, and M2 memory tiers."}'
 ```
@@ -359,7 +359,7 @@ curl -X POST http://localhost:8088/ingest/document \
 **Query**
 
 ```bash
-curl -X POST http://localhost:8088/query \
+curl -X POST http://localhost:8090/query \
   -H "Content-Type: application/json" \
   -d '{"query":"Explain the memory tiers","session_id":"demo-1"}'
 ```
@@ -367,7 +367,7 @@ curl -X POST http://localhost:8088/query \
 **IoT telemetry**
 
 ```bash
-curl -X POST http://localhost:8088/stream/iot \
+curl -X POST http://localhost:8090/stream/iot \
   -H "Content-Type: application/json" \
   -d '{"device_id":"sensor-1","zone_id":"zone-a","metric":"temperature","value":23.5}'
 ```
@@ -375,7 +375,7 @@ curl -X POST http://localhost:8088/stream/iot \
 **Approve a pending action**
 
 ```bash
-curl -X POST http://localhost:8088/actions/{action_id}/approve \
+curl -X POST http://localhost:8090/actions/{action_id}/approve \
   -H "Content-Type: application/json" \
   -d '{"approved": true, "reviewer": "operator", "note": "looks good"}'
 ```
