@@ -5,6 +5,9 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from pydantic import BaseModel
 
 from second_brain.config import get_settings
@@ -66,6 +69,8 @@ def create_app() -> FastAPI:
             "app": settings.app_name,
             "version": "0.4.0",
             "llm_configured": settings.llm_configured,
+            "llm_provider": settings.llm_provider,
+            "llm_model": settings.active_llm_model,
             "services": await container.health(),
         }
 
@@ -128,6 +133,15 @@ def create_app() -> FastAPI:
             return await container.approve_action(action_id, decision)
         except KeyError as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    # Mount static dashboard
+    static_dir = Path(__file__).parent / "static"
+    if static_dir.exists():
+        app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+    @app.get("/")
+    async def root():
+        return RedirectResponse(url="/static/index.html")
 
     return app
 

@@ -16,10 +16,22 @@ class Settings(BaseSettings):
     api_host: str = "0.0.0.0"
     api_port: int = 8088
 
-    llm_provider: str = "openai"
+    llm_provider: str = "openai"  # openai | nvidia | ollama
     llm_model: str = "gpt-4o-mini"
+    llm_temperature: float = 0.2
+    llm_enable_thinking: bool = False
+    llm_reasoning_budget: int = 8192
+
     openai_api_key: str = ""
     openai_base_url: str = "https://api.openai.com/v1"
+
+    nvidia_api_key: str = ""
+    nvidia_base_url: str = "https://integrate.api.nvidia.com/v1"
+    nvidia_model: str = "nvidia/nemotron-3-ultra-550b-a55b"
+
+    ollama_base_url: str = "http://localhost:11434/v1"
+    ollama_api_key: str = "ollama"
+    ollama_model: str = "llama3.2"
 
     neo4j_uri: str = "bolt://localhost:7687"
     neo4j_user: str = "neo4j"
@@ -54,7 +66,21 @@ class Settings(BaseSettings):
 
     @property
     def llm_configured(self) -> bool:
+        provider = self.llm_provider.lower()
+        if provider == "nvidia":
+            return bool(self.nvidia_api_key)
+        if provider == "ollama":
+            return bool(self.ollama_model)
         return bool(self.openai_api_key and self.openai_api_key != "sk-your-key-here")
+
+    @property
+    def active_llm_model(self) -> str:
+        provider = self.llm_provider.lower()
+        if provider == "nvidia":
+            return self.llm_model or self.nvidia_model
+        if provider == "ollama":
+            return self.llm_model or self.ollama_model
+        return self.llm_model
 
 
 @lru_cache

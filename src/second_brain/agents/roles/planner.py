@@ -7,11 +7,37 @@ from second_brain.config import Settings
 
 
 def build_llm(settings: Settings) -> ChatOpenAI:
+    provider = settings.llm_provider.lower()
+    temperature = settings.llm_temperature
+
+    if provider == "nvidia":
+        extra_body = None
+        if settings.llm_enable_thinking:
+            extra_body = {
+                "chat_template_kwargs": {"enable_thinking": True},
+                "reasoning_budget": settings.llm_reasoning_budget,
+            }
+        return ChatOpenAI(
+            model=settings.active_llm_model,
+            api_key=settings.nvidia_api_key or "not-set",
+            base_url=settings.nvidia_base_url,
+            temperature=temperature,
+            extra_body=extra_body,
+        )
+
+    if provider == "ollama":
+        return ChatOpenAI(
+            model=settings.active_llm_model,
+            api_key=settings.ollama_api_key or "ollama",
+            base_url=settings.ollama_base_url,
+            temperature=temperature,
+        )
+
     return ChatOpenAI(
-        model=settings.llm_model,
+        model=settings.active_llm_model,
         api_key=settings.openai_api_key or "not-set",
         base_url=settings.openai_base_url,
-        temperature=0.2,
+        temperature=temperature,
     )
 
 
@@ -28,7 +54,7 @@ def heuristic_answer(query: str, context_text: str) -> tuple[str, list[str]]:
     if evidence_snippet:
         answer = (
             f"Based on retrieved memory for '{query}':\n\n{evidence_snippet}\n\n"
-            "(Configure OPENAI_API_KEY for full multi-agent reasoning.)"
+            "(Configure LLM_PROVIDER and API keys in .env for full multi-agent reasoning.)"
         )
     else:
         answer = (

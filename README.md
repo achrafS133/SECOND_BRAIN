@@ -16,7 +16,7 @@
 
 Inspired by [MemGPT](https://arxiv.org/abs/2310.08560) · [Generative Agents](https://arxiv.org/abs/2304.03442) · [Graph-RAG](https://arxiv.org/abs/2404.16130)
 
-[**Get Started**](#quick-start) · [**Architecture**](#architecture) · [**API**](#api-reference) · [**Full Docs**](docs/ARCHITECTURE_WORKFLOW.md)
+[**Get Started**](#quick-start) · [**Dashboard**](#web-dashboard) · [**Architecture**](#architecture) · [**Testing**](#testing) · [**API**](#api-reference) · [**Full Docs**](docs/ARCHITECTURE_WORKFLOW.md)
 
 </div>
 
@@ -30,9 +30,11 @@ Inspired by [MemGPT](https://arxiv.org/abs/2310.08560) · [Generative Agents](ht
 - [Architecture](#architecture)
 - [Memory Model](#memory-model)
 - [Quick Start](#quick-start)
+- [Web Dashboard](#web-dashboard)
 - [Configuration](#configuration)
 - [API Reference](#api-reference)
 - [CLI Commands](#cli-commands)
+- [Testing](#testing)
 - [Evaluation](#evaluation)
 - [Project Structure](#project-structure)
 - [Technology Stack](#technology-stack)
@@ -269,6 +271,7 @@ second-brain query "What is the memory tier model?"
 
 | Service | URL | Default credentials |
 |---------|-----|---------------------|
+| **Web dashboard** | http://localhost:8088/ | — |
 | **API docs** | http://localhost:8088/docs | — |
 | **Health check** | http://localhost:8088/health | — |
 | **Neo4j Browser** | http://localhost:7474 | `neo4j` / `secondbrain_dev` |
@@ -280,14 +283,41 @@ second-brain query "What is the memory tier model?"
 
 ---
 
+## Web Dashboard
+
+SpaceX-inspired **Mission Control** UI — chat with the reasoning engine, stream IoT telemetry, approve actuator commands, and manage tiered memory.
+
+<div align="center">
+
+![CogOS Web Dashboard — Mission Control](docs/images/cogos-dashboard.png)
+
+</div>
+
+<p align="center"><em>Mission Control · Telemetry · Memory Systems — powered by NVIDIA Nemotron / OpenAI / Ollama</em></p>
+
+| Tab | What you can do |
+|-----|-----------------|
+| **Mission Control** | Ask questions, view agent execution trace |
+| **Telemetry** | Push IoT readings, simulate anomalies, approve actions |
+| **Memory Systems** | Ingest documents, consolidate sessions, build Graph-RAG summaries |
+
+Open after starting the API: **http://localhost:8088/** (or your `API_PORT` in `.env`).
+
+---
+
 ## Configuration
 
 Copy `.env.example` to `.env` and adjust as needed.
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `OPENAI_API_KEY` | — | LLM provider key (optional) |
-| `LLM_MODEL` | `gpt-4o-mini` | Model for planner / critic |
+| `LLM_PROVIDER` | `openai` | LLM backend: `openai`, `nvidia`, or `ollama` |
+| `LLM_MODEL` | `gpt-4o-mini` | Model name (overrides provider default when set) |
+| `OPENAI_API_KEY` | — | OpenAI API key |
+| `NVIDIA_API_KEY` | — | NVIDIA NIM key (`integrate.api.nvidia.com`) |
+| `NVIDIA_MODEL` | `nvidia/nemotron-3-ultra-550b-a55b` | NVIDIA model slug |
+| `OLLAMA_BASE_URL` | `http://localhost:11434/v1` | Local Ollama OpenAI-compatible endpoint |
+| `OLLAMA_MODEL` | `llama3.2` | Ollama model tag |
 | `NEO4J_URI` | `bolt://localhost:7687` | Graph database connection |
 | `REDIS_URL` | `redis://localhost:6379/0` | M₀ working memory |
 | `KAFKA_BOOTSTRAP_SERVERS` | `localhost:9092` | Ingestion event bus |
@@ -305,6 +335,7 @@ Interactive docs: **http://localhost:8088/docs**
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
+| `GET` | `/` | Web control center (redirects to dashboard) |
 | `GET` | `/health` | Service health & dependency status |
 | `POST` | `/query` | Evidence-grounded Q&A |
 | `POST` | `/ingest/document` | Ingest text into M₂ graph |
@@ -367,6 +398,58 @@ curl -X POST http://localhost:8088/actions/{action_id}/approve \
 
 ---
 
+## Testing
+
+### API integration script (recommended)
+
+End-to-end smoke test for health, dashboard, NVIDIA/OpenAI/Ollama query, ingest, and IoT anomaly flow:
+
+```powershell
+# Start API first
+python -m uvicorn second_brain.api.main:app --host 0.0.0.0 --port 8090
+
+# Full test (7 checks)
+.\scripts\test-api.ps1 -Port 8090
+
+# Quick test (skip IoT/LLM anomaly step)
+.\scripts\test-api.ps1 -SkipAnomaly
+
+# Full test + auto-approve first pending action
+.\scripts\test-api.ps1 -ApproveAction
+```
+
+**Verified output (all passing):**
+
+```
+Second Brain API Tests
+Target: http://localhost:8090
+--------------------------------------------------
+  [PASS] Health check          LLM: nvidia / nvidia/nemotron-3-ultra-550b-a55b
+  [PASS] Dashboard             HTTP 200
+  [PASS] Root redirect         /static/index.html
+  [PASS] Query (POST /query)   M0 working memory handles IoT streams...
+  [PASS] Ingest                1 chunk(s)
+  [PASS] IoT anomaly           pending action created
+  [PASS] Pending actions       N action(s)
+--------------------------------------------------
+All 7 test(s) passed.
+```
+
+| Script flag | Description |
+|-------------|-------------|
+| `-Port 8090` | API port (default `8090`) |
+| `-SkipAnomaly` | Skip slow IoT warmup + anomaly LLM call |
+| `-ApproveAction` | Approve the first pending IoT action after anomaly test |
+
+### Unit tests
+
+```powershell
+pytest
+pytest tests/test_api.py tests/test_cogos_tools.py -q
+```
+
+---
+
 ## Evaluation
 
 Built-in benchmarks measure quality beyond naive accuracy.
@@ -402,7 +485,7 @@ SECOND_BRAIN/
 ├── graph/schema/                         # Neo4j init Cypher
 ├── ingestion/                            # Spark & Faust worker stubs
 ├── eval/                                 # Benchmarks & ablation reports
-├── scripts/                              # setup.ps1, start-infra.ps1, fix_svg.py
+├── scripts/                              # setup.ps1, start-infra.ps1, test-api.ps1
 ├── src/second_brain/
 │   ├── agents/                           # LangGraph multi-agent graph
 │   ├── memory/                           # M₀, M₁, M₂ + embeddings + retrieval
@@ -429,15 +512,18 @@ SECOND_BRAIN/
 | Working memory | Redis Streams |
 | Embeddings | sentence-transformers |
 | Observability | OpenTelemetry + structlog |
-| LLM | OpenAI API / self-hosted Llama & Mistral |
+| LLM | OpenAI · NVIDIA NIM · Ollama (via `LLM_PROVIDER`) |
 
 ---
 
 ## Development
 
 ```powershell
-# Run tests
+# Run unit tests
 pytest
+
+# API integration smoke test (see Testing section)
+.\scripts\test-api.ps1
 
 # Lint
 ruff check src tests
@@ -462,6 +548,7 @@ python scripts/fix_svg.py
 | **4** Full agent graph | ✅ | Human approval gate, IoT policy, action API |
 | **5** Benchmarks | ✅ | Community summaries, enterprise QA scorers |
 | **6** Paper & MQTT | ✅ | Ablation runner, IoT benchmark, MQTT bridge |
+| **7** Web UI & LLM | ✅ | SpaceX-style dashboard, multi-provider LLM (OpenAI / NVIDIA / Ollama), `test-api.ps1` |
 
 ---
 

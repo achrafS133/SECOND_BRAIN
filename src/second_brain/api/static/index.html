@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COGOS | SECOND BRAIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray-100: #d1d1d1;
+      --gray-200: #8b8b8b;
+      --gray-300: #525252;
+      --border: rgba(255, 255, 255, 0.12);
+      --border-hover: rgba(255, 255, 255, 0.35);
+      --success: #4ade80;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --nav-height: 64px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Top nav (SpaceX-style) ── */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3rem;
+      z-index: 100;
+    }
+
+    .site-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .site-nav a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-100);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.25s ease;
+      border: none;
+      background: none;
+      padding: 0;
+    }
+
+    .site-nav a:hover,
+    .site-nav a.active {
+      color: var(--white);
+    }
+
+    .status-bar {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.65rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-200);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gray-300);
+    }
+
+    .status-dot.active { background: var(--success); }
+    .status-dot.inactive { background: var(--danger); }
+
+    /* ── Main layout ── */
+    .page {
+      padding-top: var(--nav-height);
+    }
+
+    .hero {
+      padding: 4rem 3rem 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-200);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h2 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 300;
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-sub {
+      font-size: 0.95rem;
+      color: var(--gray-200);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    .content {
+      padding: 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ── Tab panels ── */
+    .tab-panel { display: none; }
+    .tab-panel.active {
+      display: block;
+      animation: fadeUp 0.5s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Grid ── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 0;
+    }
+
+    .flex-column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Sections (flat, no glass) ── */
+    .section {
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      margin: -1px 0 0 -1px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header h3 {
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray-200);
+      margin-bottom: 0.35rem;
+    }
+
+    /* ── Badge ── */
+    .badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid var(--border);
+      color: var(--gray-100);
+    }
+
+    .badge.ok { border-color: rgba(74, 222, 128, 0.4); color: var(--success); }
+    .badge.warn { border-color: rgba(251, 191, 36, 0.4); color: var(--warning); }
+
+    /* ── Forms ── */
+    .form-group {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray-200);
+    }
+
+    input, select, textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+      color: var(--white);
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      transition: border-color 0.25s ease;
+      border-radius: 0;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-bottom-color: var(--white);
+    }
+
+    select option { background: #111; color: var(--white); }
+
+    textarea { resize: vertical; min-height: 120px; }
+
+    /* ── Buttons (SpaceX CTA style) ── */
+    .btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      padding: 0.9rem 2rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: opacity 0.25s ease;
+    }
+
+    .btn:hover { opacity: 0.85; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--white);
+    }
+
+    .btn-outline:hover { background: rgba(255,255,255,0.06); opacity: 1; }
+
+    .btn-sm {
+      padding: 0.5rem 1.25rem;
+      font-size: 0.65rem;
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    /* ── Chat ── */
+    .chat-box {
+      border: 1px solid var(--border);
+      height: 380px;
+      overflow-y: auto;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .chat-msg {
+      max-width: 85%;
+      line-height: 1.65;
+      font-size: 0.92rem;
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      text-align: right;
+      border-right: 2px solid var(--white);
+      padding-right: 1rem;
+    }
+
+    .chat-msg.agent {
+      align-self: flex-start;
+      border-left: 2px solid var(--gray-300);
+      padding-left: 1rem;
+    }
+
+    .chat-msg-meta {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-200);
+      margin-bottom: 0.35rem;
+    }
+
+    .chat-input-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    /* ── Trace ── */
+    .trace-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 0.5rem;
+    }
+
+    .trace-step {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.88rem;
+    }
+
+    .trace-step:last-child { border-bottom: none; }
+
+    .trace-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--border);
+      color: var(--gray-200);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .trace-badge.orchestrator { color: var(--gray-100); }
+    .trace-badge.planner     { color: var(--white); border-color: var(--border-hover); }
+    .trace-badge.tools       { color: var(--warning); border-color: rgba(251,191,36,0.3); }
+    .trace-badge.critic      { color: var(--success); border-color: rgba(74,222,128,0.3); }
+
+    /* ── Table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 1rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+
+    th {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-200);
+      font-weight: 500;
+    }
+
+    td code {
+      font-family: ui-monospace, monospace;
+      font-size: 0.8rem;
+      color: var(--gray-100);
+    }
+
+    /* ── Telemetry feed ── */
+    .telemetry-feed {
+      max-height: 240px;
+      overflow-y: auto;
+      font-family: ui-monospace, monospace;
+      font-size: 0.8rem;
+      color: var(--gray-100);
+    }
+
+    .feed-entry {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.3s ease;
+    }
+
+    .feed-entry.anomaly {
+      color: var(--danger);
+      border-left: 2px solid var(--danger);
+      padding-left: 0.75rem;
+    }
+
+    .feed-placeholder {
+      color: var(--gray-300);
+      font-style: italic;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .section-desc {
+      color: var(--gray-200);
+      font-size: 0.9rem;
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    .divider {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4rem;
+    }
+
+    .site-footer span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-300);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .site-header { padding: 0 1.5rem; }
+      .site-nav { gap: 1.25rem; }
+      .status-bar { display: none; }
+      .hero, .content { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed header -->
+  <header class="site-header">
+    <a class="site-logo" href="/">CogOS</a>
+    <nav>
+      <ul class="site-nav">
+        <li><a class="nav-link active" data-tab="dashboard" onclick="switchTab('dashboard')">Mission Control</a></li>
+        <li><a class="nav-link" data-tab="telemetry" onclick="switchTab('telemetry')">Telemetry</a></li>
+        <li><a class="nav-link" data-tab="memory" onclick="switchTab('memory')">Memory Systems</a></li>
+      </ul>
+    </nav>
+    <div class="status-bar">
+      <div class="status-item"><span class="status-dot" id="redis-health"></span> M₀ Redis</div>
+      <div class="status-item"><span class="status-dot" id="neo4j-health"></span> M₂ Neo4j</div>
+      <div class="status-item"><span class="status-dot" id="kafka-health"></span> Kafka</div>
+    </div>
+  </header>
+
+  <div class="page">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-eyebrow">Cognitive Operating System · v0.4.0</div>
+      <h2>Second Brain</h2>
+      <p class="hero-sub">Multi-agent orchestration, tiered memory architecture, and evidence-grounded reasoning for enterprise knowledge and autonomous infrastructure.</p>
+    </div>
+
+    <div class="content">
+
+      <!-- Tab: Mission Control -->
+      <div id="tab-dashboard" class="tab-panel active">
+        <div class="dashboard-grid">
+
+          <div class="flex-column">
+            <div class="section">
+              <div class="section-header">
+                <div>
+                  <div class="section-label">Agent Pipeline</div>
+                  <h3>Reasoning Engine</h3>
+                </div>
+                <span id="llm-badge" class="badge ok">LLM Active</span>
+              </div>
+
+              <div class="chat-box" id="chat-history">
+                <div class="chat-msg agent">
+                  <div class="chat-msg-meta">System</div>
+                  Mission control online. Query long-term memory or simulate IoT events via the Telemetry panel.
+                </div>
+              </div>
+
+              <div class="chat-input-row">
+                <input type="text" id="query-input" placeholder="Enter query..." onkeydown="if(event.key==='Enter') sendQuery()">
+                <button class="btn" onclick="sendQuery()">Transmit</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex-column">
+            <div class="section">
+              <div class="section-header">
+                <div>
+                  <div class="section-label">Observability</div>
+                  <h3>Execution Trace</h3>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Session ID</label>
+                <input type="text" id="session-id" value="console-session-1">
+              </div>
+              <div class="form-group">
+                <label>Task Type</label>
+                <select id="task-type">
+                  <option value="qa">Evidence Grounded QA</option>
+                  <option value="anomaly">Anomaly Investigation</option>
+                </select>
+              </div>
+
+              <label style="margin-top: 0.5rem;">Agent Trace Log</label>
+              <div class="trace-steps" id="trace-steps">
+                <div style="color: var(--gray-300); font-size: 0.85rem; padding: 1rem 0;">Awaiting transmission.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tab: Telemetry -->
+      <div id="tab-telemetry" class="tab-panel">
+        <div class="dashboard-grid">
+
+          <div class="flex-column">
+            <div class="section">
+              <div class="section-header">
+                <div>
+                  <div class="section-label">Stream Ingestion · M₀</div>
+                  <h3>Telemetry Uplink</h3>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Device ID</label>
+                  <input type="text" id="iot-device-id" value="sensor-hvac-1">
+                </div>
+                <div class="form-group">
+                  <label>Zone ID</label>
+                  <input type="text" id="iot-zone-id" value="zone-east-wing">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Metric</label>
+                  <select id="iot-metric">
+                    <option value="temperature">Temperature (°C)</option>
+                    <option value="humidity">Humidity (%)</option>
+                    <option value="co2">CO₂ (ppm)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Value</label>
+                  <input type="number" id="iot-value" step="0.1" value="22.5">
+                </div>
+              </div>
+
+              <div class="btn-group">
+                <button class="btn" onclick="sendTelemetry()">Send Data Point</button>
+                <button class="btn btn-outline" onclick="simulateAnomaly()">Simulate Anomaly</button>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-header">
+                <div>
+                  <div class="section-label">Live Feed</div>
+                  <h3>Stream Log</h3>
+                </div>
+              </div>
+              <div class="telemetry-feed" id="telemetry-feed-log">
+                <div class="feed-placeholder">Listening for stream events...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex-column">
+            <div class="section">
+              <div class="section-header">
+                <div>
+                  <div class="section-label">Human Gate</div>
+                  <h3>Pending Approvals</h3>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="loadPendingActions()">Refresh</button>
+              </div>
+              <p class="section-desc">Actuator commands proposed during anomaly events require operator authorization before execution.</p>
+
+              <div style="overflow-x: auto;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Device</th>
+                      <th>Zone</th>
+                      <th>Command</th>
+                      <th>Value</th>
+                      <th>Rationale</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pending-actions-table">
+                    <tr>
+                      <td colspan="7" style="text-align:center; color: var(--gray-300);">No pending approvals.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tab: Memory -->
+      <div id="tab-memory" class="tab-panel">
+        <div class="dashboard-grid">
+
+          <div class="flex-column">
+            <div class="section">
+              <div class="section-header">
+                <div>
+                  <div class="section-label">Long-Term Store · M₂</div>
+                  <h3>Knowledge Ingestion</h3>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Document URI</label>
+                <input type="text" id="doc-uri" value="doc://manual/hvac">
+              </div>
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="doc-title" value="HVAC Nominal Operations Manual">
+              </div>
+              <div class="form-group">
+                <label>Content</label>
+                <textarea id="doc-content" rows="6" placeholder="Paste documents, runbooks, or deployment logs..."></textarea>
+              </div>
+              <button class="btn" onclick="ingestDocument()">Ingest to Neo4j</button>
+            </div>
+          </div>
+
+          <div class="flex-column">
+            <div class="section">
+              <div class="section-header">
+                <div>
+                  <div class="section-label">Consolidation</div>
+                  <h3>Tier Promotion</h3>
+                </div>
+              </div>
+              <p class="section-desc">Compact session contexts (M₁ dialog + M₀ stream aggregates) into structural reflections in the permanent knowledge graph (M₂).</p>
+
+              <div class="form-group">
+                <label>Target Session ID</label>
+                <input type="text" id="consolidate-session-id" value="console-session-1">
+              </div>
+              <button class="btn" onclick="consolidateMemory()">Run Consolidation</button>
+
+              <hr class="divider">
+
+              <div class="section-label">Graph-RAG</div>
+              <h3 style="font-size:1.2rem; margin: 0.5rem 0 1rem;">Community Summaries</h3>
+              <p class="section-desc">Generate hierarchical community summaries via graph detection on the Neo4j knowledge graph.</p>
+              <button class="btn btn-outline" onclick="buildCommunities()">Build Summaries</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="site-footer">
+      <span>CogOS · Second Brain</span>
+      <span>© 2026 Cognitive Operating System</span>
+    </footer>
+
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(el => el.classList.remove('active'));
+
+      const link = document.querySelector(`.nav-link[data-tab="${tabId}"]`);
+      if (link) link.classList.add('active');
+      document.getElementById('tab-' + tabId).classList.add('active');
+
+      if (tabId === 'telemetry') loadPendingActions();
+    }
+
+    async function checkHealth() {
+      try {
+        const res = await fetch('/health');
+        if (!res.ok) throw new Error('API down');
+        const data = await res.json();
+        const s = data.services;
+        updateHealthStatus('redis-health', s.redis);
+        updateHealthStatus('neo4j-health', s.neo4j);
+        updateHealthStatus('kafka-health', s.kafka);
+
+        const badge = document.getElementById('llm-badge');
+        if (data.llm_configured) {
+          const provider = (data.llm_provider || 'llm').toUpperCase();
+          const model = (data.llm_model || '').split('/').pop();
+          badge.textContent = `${provider} · ${model}`;
+          badge.className = 'badge ok';
+        } else {
+          badge.textContent = 'Heuristic Fallback';
+          badge.className = 'badge warn';
+        }
+      } catch {
+        updateHealthStatus('redis-health', false);
+        updateHealthStatus('neo4j-health', false);
+        updateHealthStatus('kafka-health', false);
+      }
+    }
+
+    function updateHealthStatus(id, ok) {
+      document.getElementById(id).className = 'status-dot ' + (ok ? 'active' : 'inactive');
+    }
+
+    async function sendQuery() {
+      const input = document.getElementById('query-input');
+      const query = input.value.trim();
+      if (!query) return;
+
+      appendChatMessage('Operator', query, 'user');
+      input.value = '';
+
+      try {
+        const res = await fetch('/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query,
+            session_id: document.getElementById('session-id').value,
+            task_type: document.getElementById('task-type').value
+          })
+        });
+        if (!res.ok) throw new Error('Query request failed');
+        const data = await res.json();
+        appendChatMessage('CogOS', data.answer, 'agent');
+        updateTrace(data);
+      } catch (err) {
+        appendChatMessage('System', err.message, 'agent');
+      }
+    }
+
+    function appendChatMessage(sender, text, cls) {
+      const chat = document.getElementById('chat-history');
+      const msg = document.createElement('div');
+      msg.className = 'chat-msg ' + cls;
+      msg.innerHTML = `<div class="chat-msg-meta">${sender}</div>${text}`;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function updateTrace(data) {
+      const container = document.getElementById('trace-steps');
+      container.innerHTML = '';
+
+      if (!data.audit_trail || data.audit_trail.length === 0) {
+        (data.plan || []).forEach(step => {
+          const item = document.createElement('div');
+          item.className = 'trace-step';
+          item.innerHTML = `<span>${step}</span><span class="trace-badge planner">planner</span>`;
+          container.appendChild(item);
+        });
+        return;
+      }
+
+      data.audit_trail.forEach(event => {
+        let cls = 'orchestrator';
+        if (event.agent === 'planner') cls = 'planner';
+        if (event.agent === 'critic') cls = 'critic';
+        if (event.agent && event.agent.includes('tool')) cls = 'tools';
+
+        const item = document.createElement('div');
+        item.className = 'trace-step';
+        item.innerHTML = `
+          <div>
+            <strong>${event.action}</strong>
+            <div style="font-size:0.78rem; color:var(--gray-200); margin-top:0.25rem;">${JSON.stringify(event.payload)}</div>
+          </div>
+          <span class="trace-badge ${cls}">${event.agent}</span>`;
+        container.appendChild(item);
+      });
+    }
+
+    async function sendTelemetry() {
+      const payload = {
+        device_id: document.getElementById('iot-device-id').value,
+        zone_id: document.getElementById('iot-zone-id').value,
+        metric: document.getElementById('iot-metric').value,
+        value: parseFloat(document.getElementById('iot-value').value)
+      };
+      logFeed(`Uplink: ${JSON.stringify(payload)}`);
+
+      try {
+        const res = await fetch('/stream/iot', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('Stream upload failed');
+        const data = await res.json();
+
+        if (data.anomaly_detected) {
+          logFeed(`ANOMALY: ${data.summary}`, true);
+          if (data.agent_response) logFeed(`Agent response: ${data.agent_response}`);
+          loadPendingActions();
+        } else {
+          logFeed(`Nominal — mean=${data.stats.mean.toFixed(2)}, stdev=${data.stats.stdev.toFixed(2)}`);
+        }
+      } catch (err) {
+        logFeed(`Error: ${err.message}`, true);
+      }
+    }
+
+    async function simulateAnomaly() {
+      document.getElementById('iot-value').value = 45.0;
+      await sendTelemetry();
+    }
+
+    function logFeed(text, isAnomaly = false) {
+      const feed = document.getElementById('telemetry-feed-log');
+      if (feed.querySelector('.feed-placeholder')) feed.innerHTML = '';
+
+      const item = document.createElement('div');
+      item.className = 'feed-entry' + (isAnomaly ? ' anomaly' : '');
+      item.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${text}`;
+      feed.insertBefore(item, feed.firstChild);
+    }
+
+    async function loadPendingActions() {
+      const tbody = document.getElementById('pending-actions-table');
+      try {
+        const res = await fetch('/actions/pending');
+        if (!res.ok) throw new Error('Failed to load');
+        const actions = await res.json();
+
+        tbody.innerHTML = '';
+        if (actions.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--gray-300);">No pending approvals.</td></tr>`;
+          return;
+        }
+
+        actions.forEach(action => {
+          const p = action.proposed;
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><code>${p.device_id}</code></td>
+            <td><code>${p.zone_id}</code></td>
+            <td><code>${p.command}</code></td>
+            <td>${p.value}</td>
+            <td>${p.rationale}</td>
+            <td><span class="badge warn">${action.status}</span></td>
+            <td>
+              <div class="btn-group" style="margin:0;">
+                <button class="btn btn-sm" onclick="approveAction('${action.id}', true)">Approve</button>
+                <button class="btn btn-sm btn-danger" onclick="approveAction('${action.id}', false)">Reject</button>
+              </div>
+            </td>`;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);">${err.message}</td></tr>`;
+      }
+    }
+
+    async function approveAction(id, approved) {
+      try {
+        const res = await fetch(`/actions/${id}/approve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ approved, reviewer: 'operator', note: approved ? 'Approved' : 'Rejected' })
+        });
+        if (!res.ok) throw new Error('Approval failed');
+        const data = await res.json();
+        logFeed(`Action ${id}: ${data.status}`);
+        loadPendingActions();
+      } catch (err) {
+        alert('Approval failed: ' + err.message);
+      }
+    }
+
+    async function ingestDocument() {
+      const uri = document.getElementById('doc-uri').value.trim();
+      const title = document.getElementById('doc-title').value.trim();
+      const content = document.getElementById('doc-content').value.trim();
+      if (!uri || !title || !content) { alert('Fill all fields.'); return; }
+
+      try {
+        const res = await fetch('/ingest/document', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ uri, title, content })
+        });
+        if (!res.ok) throw new Error('Ingestion failed');
+        const data = await res.json();
+        alert(`Ingested — ${data.chunk_count} chunk(s) created.`);
+        document.getElementById('doc-content').value = '';
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    async function consolidateMemory() {
+      const sessionId = document.getElementById('consolidate-session-id').value.trim();
+      if (!sessionId) return;
+      try {
+        const res = await fetch('/memory/consolidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: sessionId })
+        });
+        if (!res.ok) throw new Error('Consolidation failed');
+        alert('Consolidation complete: ' + JSON.stringify(await res.json()));
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    async function buildCommunities() {
+      try {
+        const res = await fetch('/graph/communities/build', { method: 'POST' });
+        if (!res.ok) throw new Error('Build failed');
+        const data = await res.json();
+        alert(`Community summaries built: ${data.count}`);
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    checkHealth();
+    setInterval(checkHealth, 5000);
+  </script>
+</body>
+</html>

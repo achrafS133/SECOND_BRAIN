@@ -4,13 +4,14 @@ import logging
 from typing import Literal
 from uuid import uuid4
 
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
+from langchain_core.tools import tool
 from langgraph.graph import END, StateGraph
 
 from second_brain.agents.graph.state import CogOSState
 from second_brain.agents.roles.critic import evaluate_answer
 from second_brain.agents.roles.planner import build_llm, heuristic_answer
-from second_brain.agents.tools.registry import emit_audit_event, search_knowledge_base
+from second_brain.agents.tools.registry import emit_audit_event, search_knowledge_base, simulate_iot_action
 from second_brain.config import Settings
 from second_brain.eval.ablation.config import FULL_COGOS, AblationProfile
 from second_brain.memory.manager import MemoryManager
@@ -19,6 +20,18 @@ from second_brain.schemas import CriticVerdict, QueryResponse, TaskType
 
 logger = logging.getLogger(__name__)
 MAX_ITERATIONS = 2
+
+
+@tool
+def search_knowledge_base_tool(query: str) -> str:
+    """Search the retrieved long-term memory chunks/knowledge hits for facts matching the query."""
+    return ""
+
+
+@tool
+def simulate_iot_action_tool(device_id: str, command: str, value: float) -> str:
+    """Simulate applying an IoT actuation command and value to a device."""
+    return ""
 
 
 class CogOSGraph:
@@ -33,6 +46,7 @@ class CogOSGraph:
         self.memory = memory_manager
         self.embeddings = embedding_service
         self.ablation = ablation or FULL_COGOS
+        self.tools = [search_knowledge_base_tool, simulate_iot_action_tool]
         self.graph = self._build()
 
     def _build(self):
@@ -44,18 +58,29 @@ class CogOSGraph:
         workflow.set_entry_point("orchestrator")
         workflow.add_edge("orchestrator", "memory_load")
         workflow.add_edge("memory_load", "planner")
-        workflow.add_edge("planner", "tool_executor")
+
+        planner_routes = {
+            "tool_executor": "tool_executor",
+        }
+        if self.ablation.use_critic:
+            planner_routes["critic"] = "critic"
+        else:
+            planner_routes["finish"] = END
+
+        workflow.add_conditional_edges(
+            "planner",
+            self._route_after_planner,
+            planner_routes,
+        )
+        workflow.add_edge("tool_executor", "planner")
 
         if self.ablation.use_critic:
             workflow.add_node("critic", self.critic)
-            workflow.add_edge("tool_executor", "critic")
             workflow.add_conditional_edges(
                 "critic",
                 self._route_after_critic,
                 {"revise": "planner", "finish": END},
             )
-        else:
-            workflow.add_edge("tool_executor", END)
 
         return workflow.compile()
 
@@ -87,47 +112,124 @@ class CogOSGraph:
 
     async def planner(self, state: CogOSState) -> dict:
         iteration = state.get("iteration", 0) + 1
+        messages = list(state.get("messages", []))
+
+        if not messages:
+            system = SystemMessage(
+                content=(
+                    "You are the Planner agent in The Second Brain CogOS. "
+                    "Use ONLY the provided context and tools. Return a concise, grounded answer."
+                )
+            )
+            human = HumanMessage(
+                content=f"Context:\n{state['context_text']}\n\nQuery: {state['query']}"
+            )
+            messages = [system, human]
+
+        if state.get("critic_feedback"):
+            messages.append(HumanMessage(content=f"Critic feedback: {state['critic_feedback']}"))
+
         if self.settings.llm_configured:
             try:
                 llm = build_llm(self.settings)
-                system = SystemMessage(
-                    content=(
-                        "You are the Planner agent in The Second Brain CogOS. "
-                        "Use ONLY the provided context. Return a concise, grounded answer."
-                    )
-                )
-                human = HumanMessage(
-                    content=f"Context:\n{state['context_text']}\n\nQuery: {state['query']}"
-                )
-                if state.get("critic_feedback"):
-                    human = HumanMessage(
-                        content=(
-                            f"{human.content}\n\nCritic feedback: {state['critic_feedback']}"
-                        )
-                    )
-                response = await llm.ainvoke([system, human])
-                answer = str(response.content)
-                plan = ["LLM synthesis with retrieved context"]
+                llm_with_tools = llm.bind_tools(self.tools)
+                response = await llm_with_tools.ainvoke(messages)
+
+                if hasattr(response, "tool_calls") and response.tool_calls:
+                    return {
+                        "messages": messages + [response],
+                        "iteration": iteration,
+                    }
+                else:
+                    return {
+                        "messages": messages + [response],
+                        "draft_answer": str(response.content),
+                        "plan": ["LLM synthesis with retrieved context"],
+                        "iteration": iteration,
+                    }
             except Exception as exc:  # noqa: BLE001
                 logger.warning("LLM planner failed, using heuristic: %s", exc)
                 answer, plan = heuristic_answer(state["query"], state["context_text"])
+                return {
+                    "draft_answer": answer,
+                    "plan": plan,
+                    "iteration": iteration,
+                }
         else:
             answer, plan = heuristic_answer(state["query"], state["context_text"])
-
-        return {"draft_answer": answer, "plan": plan, "iteration": iteration}
+            return {
+                "draft_answer": answer,
+                "plan": plan,
+                "iteration": iteration,
+            }
 
     async def tool_executor(self, state: CogOSState) -> dict:
+        messages = state.get("messages", [])
+        if not messages:
+            return {}
+
+        last_message = messages[-1]
+        if not (hasattr(last_message, "tool_calls") and last_message.tool_calls):
+            return {}
+
         evidence_nodes = []
         if state.get("tool_results"):
             evidence_nodes = state["tool_results"][0].get("evidence_nodes", [])
-        result = search_knowledge_base(state["query"], evidence_nodes)
-        return {"tool_results": state.get("tool_results", []) + [result.model_dump()]}
+
+        new_messages = []
+        tool_results = list(state.get("tool_results", []))
+        audit_trail = list(state.get("audit_trail", []))
+
+        for tool_call in last_message.tool_calls:
+            tool_name = tool_call["name"]
+            args = tool_call["args"]
+            tool_call_id = tool_call["id"]
+
+            output = ""
+            if tool_name == "search_knowledge_base_tool":
+                q = args.get("query", state["query"])
+                res = search_knowledge_base(q, evidence_nodes)
+                output = res.output
+                tool_results.append(res.model_dump())
+            elif tool_name == "simulate_iot_action_tool":
+                device_id = args.get("device_id")
+                command = args.get("command")
+                value = args.get("value", 0.0)
+                res = simulate_iot_action(device_id, command, value)
+                output = res.output
+                tool_results.append(res.model_dump())
+            else:
+                output = f"Unknown tool: {tool_name}"
+
+            trace_id = state.get("session_id", "local-session")
+            audit = emit_audit_event(
+                trace_id=trace_id,
+                agent="planner",
+                action=f"call_{tool_name}",
+                payload={"args": args, "output": output},
+            )
+            audit_trail.append(audit.metadata)
+
+            new_messages.append(
+                ToolMessage(
+                    content=output,
+                    tool_call_id=tool_call_id,
+                    name=tool_name,
+                )
+            )
+
+        return {
+            "messages": messages + new_messages,
+            "tool_results": tool_results,
+            "audit_trail": audit_trail,
+        }
 
     async def critic(self, state: CogOSState) -> dict:
         evidence = None
         if state.get("tool_results"):
             from second_brain.schemas import EvidencePackage, GraphNode
 
+            # The first entry in tool_results contains evidence nodes from memory_load
             nodes_raw = state["tool_results"][0].get("evidence_nodes", [])
             evidence = EvidencePackage(
                 nodes=[GraphNode(**n) for n in nodes_raw if isinstance(n, dict)]
@@ -138,6 +240,14 @@ class CogOSGraph:
             task_type=state.get("task_type", "qa"),
         )
         return {"critic_verdict": verdict.value, "critic_feedback": feedback}
+
+    def _route_after_planner(self, state: CogOSState) -> Literal["tool_executor", "critic", "finish"]:
+        messages = state.get("messages", [])
+        if messages and hasattr(messages[-1], "tool_calls") and messages[-1].tool_calls:
+            return "tool_executor"
+        if self.ablation.use_critic:
+            return "critic"
+        return "finish"
 
     def _route_after_critic(self, state: CogOSState) -> Literal["revise", "finish"]:
         if state.get("critic_verdict") == CriticVerdict.REVISE.value and state.get(
